@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS chicks;
+DROP TABLE IF EXISTS production;
+DROP TABLE IF EXISTS hatchery;
+DROP TABLE IF EXISTS premises;

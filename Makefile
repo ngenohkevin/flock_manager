@@ -6,3 +6,9 @@ createdb:
 
 dropdb:
 	docker exec -it postgres15 dropdb flock_manager
+
+migrateup:
+	migrate -path db/migration -database "postgresql://root:85dilanwest@localhost:5432/flock_manager?sslmode=disable" -verbose up
+
+migratedown:
+	migrate -path db/migration -database "postgresql://root:85dilanwest@localhost:5432/flock_manager?sslmode=disable" -verbose down
