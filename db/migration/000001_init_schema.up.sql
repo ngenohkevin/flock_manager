@@ -1,10 +1,7 @@
-CREATE TABLE "chicks" (
-                          "chicks_id" bigserial PRIMARY KEY,
-                          "kuroiler" varchar,
-                          "rainbowrooster" varchar,
-                          "broiler" varchar,
-                          "layers" varchar,
-                          "created_at" timestamptz NOT NULL DEFAULT (now())
+CREATE TABLE "breed" (
+                         "breed_id" bigserial PRIMARY KEY,
+                         "breed_name" varchar UNIQUE NOT NULL,
+                         "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "production" (
@@ -40,8 +37,8 @@ CREATE INDEX ON "production" ("production_id");
 
 CREATE INDEX ON "hatchery" ("hatchery_id");
 
-ALTER TABLE "production" ADD FOREIGN KEY ("production_id") REFERENCES "chicks" ("chicks_id");
+ALTER TABLE "production" ADD FOREIGN KEY ("production_id") REFERENCES "breed" ("breed_id");
 
-ALTER TABLE "hatchery" ADD FOREIGN KEY ("hatchery_id") REFERENCES "chicks" ("chicks_id");
+ALTER TABLE "hatchery" ADD FOREIGN KEY ("hatchery_id") REFERENCES "production" ("production_id");
 
-ALTER TABLE "premises" ADD FOREIGN KEY ("premises_id") REFERENCES "chicks" ("chicks_id");
+ALTER TABLE "premises" ADD FOREIGN KEY ("premises_id") REFERENCES "breed" ("breed_id");

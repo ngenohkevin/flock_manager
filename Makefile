@@ -12,3 +12,9 @@ migrateup:
 
 migratedown:
 	migrate -path db/migration -database "postgresql://root:85dilanwest@localhost:5432/flock_manager?sslmode=disable" -verbose down
+
+sqlc:
+	sqlc generate
+
+
+.PHONY: postgres createdb dropdb migrateup migratedown sqlc test
