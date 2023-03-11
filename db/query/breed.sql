@@ -16,7 +16,7 @@ ORDER BY breed_id
     LIMIT $1
 OFFSET $2;
 
--- name: UpdateBreed  :one
+-- name: UpdateBreed :one
 UPDATE breed
 set breed_name = $2
 WHERE breed_id = $1
