@@ -53,6 +53,16 @@ func (q *Queries) CreateProduction(ctx context.Context, arg CreateProductionPara
 	return i, err
 }
 
+const deleteProduction = `-- name: DeleteProduction :exec
+DELETE FROM production
+WHERE id = $1
+`
+
+func (q *Queries) DeleteProduction(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteProduction, id)
+	return err
+}
+
 const getProduction = `-- name: GetProduction :one
 SELECT id, production_id, eggs, dirty, wrong_shape, weak_shell, damaged, hatching_eggs, created_at FROM production
 WHERE production_id = $1 LIMIT 1
@@ -120,4 +130,51 @@ func (q *Queries) ListProduction(ctx context.Context, arg ListProductionParams) 
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateProduction = `-- name: UpdateProduction :one
+UPDATE production
+SET eggs = $2,
+    dirty = $3,
+    wrong_shape = $4,
+    weak_shell = $5,
+    damaged = $6,
+    hatching_eggs = $7
+WHERE id = $1
+RETURNING id, production_id, eggs, dirty, wrong_shape, weak_shell, damaged, hatching_eggs, created_at
+`
+
+type UpdateProductionParams struct {
+	ID           int64 `json:"id"`
+	Eggs         int64 `json:"eggs"`
+	Dirty        int64 `json:"dirty"`
+	WrongShape   int64 `json:"wrong_shape"`
+	WeakShell    int64 `json:"weak_shell"`
+	Damaged      int64 `json:"damaged"`
+	HatchingEggs int64 `json:"hatching_eggs"`
+}
+
+func (q *Queries) UpdateProduction(ctx context.Context, arg UpdateProductionParams) (Production, error) {
+	row := q.db.QueryRowContext(ctx, updateProduction,
+		arg.ID,
+		arg.Eggs,
+		arg.Dirty,
+		arg.WrongShape,
+		arg.WeakShell,
+		arg.Damaged,
+		arg.HatchingEggs,
+	)
+	var i Production
+	err := row.Scan(
+		&i.ID,
+		&i.ProductionID,
+		&i.Eggs,
+		&i.Dirty,
+		&i.WrongShape,
+		&i.WeakShell,
+		&i.Damaged,
+		&i.HatchingEggs,
+		&i.CreatedAt,
+	)
+	return i, err
 }
