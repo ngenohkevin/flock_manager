@@ -28,10 +28,12 @@ CREATE TABLE "hatchery" (
 
 CREATE TABLE "premises" (
                             "premises_id" bigserial PRIMARY KEY,
-                            "farm" varchar,
-                            "house" varchar,
+                            "farm" varchar NOT NULL,
+                            "house" varchar NOT NULL,
                             "created_at" timestamptz NOT NULL DEFAULT (now())
 );
+
+CREATE INDEX ON "breed" ("breed_name");
 
 CREATE INDEX ON "production" ("production_id");
 

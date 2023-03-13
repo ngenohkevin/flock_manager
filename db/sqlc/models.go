@@ -5,7 +5,6 @@
 package db
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -27,10 +26,10 @@ type Hatchery struct {
 }
 
 type Premise struct {
-	PremisesID int64          `json:"premises_id"`
-	Farm       sql.NullString `json:"farm"`
-	House      sql.NullString `json:"house"`
-	CreatedAt  time.Time      `json:"created_at"`
+	PremisesID int64     `json:"premises_id"`
+	Farm       string    `json:"farm"`
+	House      string    `json:"house"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
 type Production struct {
