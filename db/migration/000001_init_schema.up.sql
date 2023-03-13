@@ -5,7 +5,8 @@ CREATE TABLE "breed" (
 );
 
 CREATE TABLE "production" (
-                              "production_id" bigserial PRIMARY KEY,
+                              "id" bigserial PRIMARY KEY,
+                              "production_id" bigint UNIQUE NOT NULL,
                               "eggs" bigint NOT NULL,
                               "dirty" bigint NOT NULL,
                               "wrong_shape" bigint NOT NULL,
@@ -16,7 +17,8 @@ CREATE TABLE "production" (
 );
 
 CREATE TABLE "hatchery" (
-                            "hatchery_id" bigserial PRIMARY KEY,
+                            "id" bigserial PRIMARY KEY,
+                            "hatchery_id" bigint NOT NULL,
                             "infertile" bigint NOT NULL,
                             "early" bigint NOT NULL,
                             "middle" bigint NOT NULL,
@@ -27,7 +29,8 @@ CREATE TABLE "hatchery" (
 );
 
 CREATE TABLE "premises" (
-                            "premises_id" bigserial PRIMARY KEY,
+                            "id" bigserial PRIMARY KEY,
+                            "premises_id" bigint NOT NULL,
                             "farm" varchar NOT NULL,
                             "house" varchar NOT NULL,
                             "created_at" timestamptz NOT NULL DEFAULT (now())
@@ -38,6 +41,8 @@ CREATE INDEX ON "breed" ("breed_name");
 CREATE INDEX ON "production" ("production_id");
 
 CREATE INDEX ON "hatchery" ("hatchery_id");
+
+CREATE INDEX ON "premises" ("premises_id");
 
 ALTER TABLE "production" ADD FOREIGN KEY ("production_id") REFERENCES "breed" ("breed_id");
 
