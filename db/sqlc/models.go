@@ -15,6 +15,7 @@ type Breed struct {
 }
 
 type Hatchery struct {
+	ID          int64     `json:"id"`
 	HatcheryID  int64     `json:"hatchery_id"`
 	Infertile   int64     `json:"infertile"`
 	Early       int64     `json:"early"`
@@ -26,6 +27,7 @@ type Hatchery struct {
 }
 
 type Premise struct {
+	ID         int64     `json:"id"`
 	PremisesID int64     `json:"premises_id"`
 	Farm       string    `json:"farm"`
 	House      string    `json:"house"`
@@ -33,6 +35,7 @@ type Premise struct {
 }
 
 type Production struct {
+	ID           int64     `json:"id"`
 	ProductionID int64     `json:"production_id"`
 	Eggs         int64     `json:"eggs"`
 	Dirty        int64     `json:"dirty"`

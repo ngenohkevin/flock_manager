@@ -15,7 +15,7 @@ INSERT INTO production (
                  production_id, eggs, dirty, wrong_shape, weak_shell, damaged, hatching_eggs
 ) VALUES (
            $1, $2, $3, $4, $5, $6, $7
-) RETURNING production_id, eggs, dirty, wrong_shape, weak_shell, damaged, hatching_eggs, created_at
+) RETURNING id, production_id, eggs, dirty, wrong_shape, weak_shell, damaged, hatching_eggs, created_at
 `
 
 type CreateProductionParams struct {
@@ -40,6 +40,7 @@ func (q *Queries) CreateProduction(ctx context.Context, arg CreateProductionPara
 	)
 	var i Production
 	err := row.Scan(
+		&i.ID,
 		&i.ProductionID,
 		&i.Eggs,
 		&i.Dirty,
@@ -50,4 +51,73 @@ func (q *Queries) CreateProduction(ctx context.Context, arg CreateProductionPara
 		&i.CreatedAt,
 	)
 	return i, err
+}
+
+const getProduction = `-- name: GetProduction :one
+SELECT id, production_id, eggs, dirty, wrong_shape, weak_shell, damaged, hatching_eggs, created_at FROM production
+WHERE production_id = $1 LIMIT 1
+`
+
+func (q *Queries) GetProduction(ctx context.Context, productionID int64) (Production, error) {
+	row := q.db.QueryRowContext(ctx, getProduction, productionID)
+	var i Production
+	err := row.Scan(
+		&i.ID,
+		&i.ProductionID,
+		&i.Eggs,
+		&i.Dirty,
+		&i.WrongShape,
+		&i.WeakShell,
+		&i.Damaged,
+		&i.HatchingEggs,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const listProduction = `-- name: ListProduction :many
+SELECT id, production_id, eggs, dirty, wrong_shape, weak_shell, damaged, hatching_eggs, created_at FROM production
+WHERE production_id = $1
+ORDER BY id
+LIMIT $2
+OFFSET $3
+`
+
+type ListProductionParams struct {
+	ProductionID int64 `json:"production_id"`
+	Limit        int32 `json:"limit"`
+	Offset       int32 `json:"offset"`
+}
+
+func (q *Queries) ListProduction(ctx context.Context, arg ListProductionParams) ([]Production, error) {
+	rows, err := q.db.QueryContext(ctx, listProduction, arg.ProductionID, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Production
+	for rows.Next() {
+		var i Production
+		if err := rows.Scan(
+			&i.ID,
+			&i.ProductionID,
+			&i.Eggs,
+			&i.Dirty,
+			&i.WrongShape,
+			&i.WeakShell,
+			&i.Damaged,
+			&i.HatchingEggs,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
