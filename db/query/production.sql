@@ -16,3 +16,21 @@ WHERE production_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3;
+
+-- name: UpdateProduction :one
+UPDATE production
+SET eggs = $2,
+    dirty = $3,
+    wrong_shape = $4,
+    weak_shell = $5,
+    damaged = $6,
+    hatching_eggs = $7
+WHERE id = $1
+RETURNING *;
+
+-- name: DeleteProduction :exec
+DELETE FROM production
+WHERE id = $1;
+
+
+
