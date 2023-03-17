@@ -91,3 +91,25 @@ func TestUpdateProduction(t *testing.T) {
 	require.WithinDuration(t, production1.CreatedAt, production2.CreatedAt, time.Second)
 
 }
+
+func TestListProduction(t *testing.T) {
+	breed := createdRandomBreed(t)
+	for i := 0; i < 10; i++ {
+		createRandomProduction(t, breed)
+	}
+
+	arg := ListProductionParams{
+		ProductionID: breed.BreedID,
+		Limit:        5,
+		Offset:       5,
+	}
+
+	production, err := testQueries.ListProduction(context.Background(), arg)
+	require.NoError(t, err)
+	require.Len(t, production, 5)
+
+	for _, prod := range production {
+		require.NotEmpty(t, prod)
+	}
+
+}
