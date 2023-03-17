@@ -61,3 +61,33 @@ func TestGetProduction(t *testing.T) {
 
 	require.WithinDuration(t, production1.CreatedAt, production2.CreatedAt, time.Second)
 }
+
+func TestUpdateProduction(t *testing.T) {
+	breed := createdRandomBreed(t)
+
+	production1 := createRandomProduction(t, breed)
+
+	arg := UpdateProductionParams{
+		ID:           production1.ID,
+		Eggs:         util.RandomProduction(),
+		Dirty:        util.RandomProduction(),
+		WrongShape:   util.RandomProduction(),
+		Damaged:      util.RandomProduction(),
+		HatchingEggs: util.RandomProduction(),
+	}
+
+	production2, err := testQueries.UpdateProduction(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, production2)
+
+	require.Equal(t, production1.ID, production2.ID)
+	require.Equal(t, production1.Eggs, production2.Eggs)
+	require.Equal(t, production1.Dirty, production2.Dirty)
+	require.Equal(t, production1.WrongShape, production2.WrongShape)
+	require.Equal(t, production1.WeakShell, production2.WeakShell)
+	require.Equal(t, production1.Damaged, production2.Damaged)
+	require.Equal(t, production1.HatchingEggs, production2.HatchingEggs)
+
+	require.WithinDuration(t, production1.CreatedAt, production2.CreatedAt, time.Second)
+
+}
