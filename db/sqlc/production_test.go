@@ -81,12 +81,12 @@ func TestUpdateProduction(t *testing.T) {
 	require.NotEmpty(t, production2)
 
 	require.Equal(t, production1.ID, production2.ID)
-	require.Equal(t, production1.Eggs, production2.Eggs)
-	require.Equal(t, production1.Dirty, production2.Dirty)
-	require.Equal(t, production1.WrongShape, production2.WrongShape)
-	require.Equal(t, production1.WeakShell, production2.WeakShell)
-	require.Equal(t, production1.Damaged, production2.Damaged)
-	require.Equal(t, production1.HatchingEggs, production2.HatchingEggs)
+	require.Equal(t, arg.Eggs, production2.Eggs)
+	require.Equal(t, arg.Dirty, production2.Dirty)
+	require.Equal(t, arg.WrongShape, production2.WrongShape)
+	require.Equal(t, arg.WeakShell, production2.WeakShell)
+	require.Equal(t, arg.Damaged, production2.Damaged)
+	require.Equal(t, arg.HatchingEggs, production2.HatchingEggs)
 
 	require.WithinDuration(t, production1.CreatedAt, production2.CreatedAt, time.Second)
 
