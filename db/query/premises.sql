@@ -1,16 +1,16 @@
 -- name: CreatePremises :one
 
-INSERT INTO premises (premises_id, farm, house)
+INSERT INTO premises (breed_id, farm, house)
 VALUES ($1, $2, $3)
 RETURNING *;
 
 -- name: GetPremises :one
 SELECT * FROM premises
-WHERE premises_id = $1 LIMIT 1;
+WHERE breed_id = $1 LIMIT 1;
 
 -- name: ListPremises :many
 SELECT * FROM premises
-WHERE premises_id = $1
+WHERE breed_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3;
