@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"database/sql"
 	"github.com/ngenohkevin/flock_manager/db/util"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -114,4 +115,19 @@ func TestListProduction(t *testing.T) {
 		require.Equal(t, arg.BreedID, prod.BreedID)
 	}
 
+}
+
+func TestDeleteProduction(t *testing.T) {
+	breed := createdRandomBreed(t)
+
+	production1 := createRandomProduction(t, breed)
+	err := testQueries.DeleteProduction(context.Background(), production1.BreedID)
+
+	require.NoError(t, err)
+
+	production2, err := testQueries.GetProduction(context.Background(), production1.ID)
+	require.Error(t, err)
+	require.EqualError(t, err, sql.ErrNoRows.Error())
+
+	require.Empty(t, production2)
 }
