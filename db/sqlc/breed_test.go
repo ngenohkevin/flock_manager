@@ -83,6 +83,7 @@ func TestDeleteBreed(t *testing.T) {
 	require.NoError(t, err)
 
 	breed2, err := testQueries.GetBreed(context.Background(), breed1.BreedID)
+
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 
