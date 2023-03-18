@@ -15,28 +15,28 @@ type Breed struct {
 }
 
 type Hatchery struct {
-	ID          int64     `json:"id"`
-	HatcheryID  int64     `json:"hatchery_id"`
-	Infertile   int64     `json:"infertile"`
-	Early       int64     `json:"early"`
-	Middle      int64     `json:"middle"`
-	Late        int64     `json:"late"`
-	DeadChicks  int64     `json:"dead_chicks"`
-	AliveChicks int64     `json:"alive_chicks"`
-	CreatedAt   time.Time `json:"created_at"`
+	ID           int64     `json:"id"`
+	ProductionID int64     `json:"production_id"`
+	Infertile    int64     `json:"infertile"`
+	Early        int64     `json:"early"`
+	Middle       int64     `json:"middle"`
+	Late         int64     `json:"late"`
+	DeadChicks   int64     `json:"dead_chicks"`
+	AliveChicks  int64     `json:"alive_chicks"`
+	CreatedAt    time.Time `json:"created_at"`
 }
 
 type Premise struct {
-	ID         int64     `json:"id"`
-	PremisesID int64     `json:"premises_id"`
-	Farm       string    `json:"farm"`
-	House      string    `json:"house"`
-	CreatedAt  time.Time `json:"created_at"`
+	ID        int64     `json:"id"`
+	BreedID   int64     `json:"breed_id"`
+	Farm      string    `json:"farm"`
+	House     string    `json:"house"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 type Production struct {
 	ID           int64     `json:"id"`
-	ProductionID int64     `json:"production_id"`
+	BreedID      int64     `json:"breed_id"`
 	Eggs         int64     `json:"eggs"`
 	Dirty        int64     `json:"dirty"`
 	WrongShape   int64     `json:"wrong_shape"`

@@ -11,23 +11,23 @@ import (
 
 const createPremises = `-- name: CreatePremises :one
 
-INSERT INTO premises (premises_id, farm, house)
+INSERT INTO premises (breed_id, farm, house)
 VALUES ($1, $2, $3)
-RETURNING id, premises_id, farm, house, created_at
+RETURNING id, breed_id, farm, house, created_at
 `
 
 type CreatePremisesParams struct {
-	PremisesID int64  `json:"premises_id"`
-	Farm       string `json:"farm"`
-	House      string `json:"house"`
+	BreedID int64  `json:"breed_id"`
+	Farm    string `json:"farm"`
+	House   string `json:"house"`
 }
 
 func (q *Queries) CreatePremises(ctx context.Context, arg CreatePremisesParams) (Premise, error) {
-	row := q.db.QueryRowContext(ctx, createPremises, arg.PremisesID, arg.Farm, arg.House)
+	row := q.db.QueryRowContext(ctx, createPremises, arg.BreedID, arg.Farm, arg.House)
 	var i Premise
 	err := row.Scan(
 		&i.ID,
-		&i.PremisesID,
+		&i.BreedID,
 		&i.Farm,
 		&i.House,
 		&i.CreatedAt,
@@ -46,16 +46,16 @@ func (q *Queries) DeletePremises(ctx context.Context, id int64) error {
 }
 
 const getPremises = `-- name: GetPremises :one
-SELECT id, premises_id, farm, house, created_at FROM premises
-WHERE premises_id = $1 LIMIT 1
+SELECT id, breed_id, farm, house, created_at FROM premises
+WHERE breed_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetPremises(ctx context.Context, premisesID int64) (Premise, error) {
-	row := q.db.QueryRowContext(ctx, getPremises, premisesID)
+func (q *Queries) GetPremises(ctx context.Context, breedID int64) (Premise, error) {
+	row := q.db.QueryRowContext(ctx, getPremises, breedID)
 	var i Premise
 	err := row.Scan(
 		&i.ID,
-		&i.PremisesID,
+		&i.BreedID,
 		&i.Farm,
 		&i.House,
 		&i.CreatedAt,
@@ -64,21 +64,21 @@ func (q *Queries) GetPremises(ctx context.Context, premisesID int64) (Premise, e
 }
 
 const listPremises = `-- name: ListPremises :many
-SELECT id, premises_id, farm, house, created_at FROM premises
-WHERE premises_id = $1
+SELECT id, breed_id, farm, house, created_at FROM premises
+WHERE breed_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3
 `
 
 type ListPremisesParams struct {
-	PremisesID int64 `json:"premises_id"`
-	Limit      int32 `json:"limit"`
-	Offset     int32 `json:"offset"`
+	BreedID int64 `json:"breed_id"`
+	Limit   int32 `json:"limit"`
+	Offset  int32 `json:"offset"`
 }
 
 func (q *Queries) ListPremises(ctx context.Context, arg ListPremisesParams) ([]Premise, error) {
-	rows, err := q.db.QueryContext(ctx, listPremises, arg.PremisesID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listPremises, arg.BreedID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (q *Queries) ListPremises(ctx context.Context, arg ListPremisesParams) ([]P
 		var i Premise
 		if err := rows.Scan(
 			&i.ID,
-			&i.PremisesID,
+			&i.BreedID,
 			&i.Farm,
 			&i.House,
 			&i.CreatedAt,
@@ -111,7 +111,7 @@ UPDATE premises
 SET farm = $2,
     house = $3
 WHERE id = $1
-RETURNING id, premises_id, farm, house, created_at
+RETURNING id, breed_id, farm, house, created_at
 `
 
 type UpdatePremisesParams struct {
@@ -125,7 +125,7 @@ func (q *Queries) UpdatePremises(ctx context.Context, arg UpdatePremisesParams) 
 	var i Premise
 	err := row.Scan(
 		&i.ID,
-		&i.PremisesID,
+		&i.BreedID,
 		&i.Farm,
 		&i.House,
 		&i.CreatedAt,

@@ -11,26 +11,26 @@ import (
 
 const createHatchery = `-- name: CreateHatchery :one
 INSERT INTO hatchery(
-                     hatchery_id, infertile, early, middle, late, dead_chicks, alive_chicks
+                     production_id, infertile, early, middle, late, dead_chicks, alive_chicks
 ) VALUES (
           $1, $2, $3, $4, $5, $6, $7
          )
-RETURNING id, hatchery_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at
+RETURNING id, production_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at
 `
 
 type CreateHatcheryParams struct {
-	HatcheryID  int64 `json:"hatchery_id"`
-	Infertile   int64 `json:"infertile"`
-	Early       int64 `json:"early"`
-	Middle      int64 `json:"middle"`
-	Late        int64 `json:"late"`
-	DeadChicks  int64 `json:"dead_chicks"`
-	AliveChicks int64 `json:"alive_chicks"`
+	ProductionID int64 `json:"production_id"`
+	Infertile    int64 `json:"infertile"`
+	Early        int64 `json:"early"`
+	Middle       int64 `json:"middle"`
+	Late         int64 `json:"late"`
+	DeadChicks   int64 `json:"dead_chicks"`
+	AliveChicks  int64 `json:"alive_chicks"`
 }
 
 func (q *Queries) CreateHatchery(ctx context.Context, arg CreateHatcheryParams) (Hatchery, error) {
 	row := q.db.QueryRowContext(ctx, createHatchery,
-		arg.HatcheryID,
+		arg.ProductionID,
 		arg.Infertile,
 		arg.Early,
 		arg.Middle,
@@ -41,7 +41,7 @@ func (q *Queries) CreateHatchery(ctx context.Context, arg CreateHatcheryParams) 
 	var i Hatchery
 	err := row.Scan(
 		&i.ID,
-		&i.HatcheryID,
+		&i.ProductionID,
 		&i.Infertile,
 		&i.Early,
 		&i.Middle,
@@ -64,16 +64,16 @@ func (q *Queries) DeleteHatchery(ctx context.Context, id int64) error {
 }
 
 const getHatchery = `-- name: GetHatchery :one
-SELECT id, hatchery_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at FROM hatchery
-WHERE hatchery_id = $1 LIMIT 1
+SELECT id, production_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at FROM hatchery
+WHERE production_id = $1 LIMIT 1
 `
 
-func (q *Queries) GetHatchery(ctx context.Context, hatcheryID int64) (Hatchery, error) {
-	row := q.db.QueryRowContext(ctx, getHatchery, hatcheryID)
+func (q *Queries) GetHatchery(ctx context.Context, productionID int64) (Hatchery, error) {
+	row := q.db.QueryRowContext(ctx, getHatchery, productionID)
 	var i Hatchery
 	err := row.Scan(
 		&i.ID,
-		&i.HatcheryID,
+		&i.ProductionID,
 		&i.Infertile,
 		&i.Early,
 		&i.Middle,
@@ -86,21 +86,21 @@ func (q *Queries) GetHatchery(ctx context.Context, hatcheryID int64) (Hatchery, 
 }
 
 const listHatchery = `-- name: ListHatchery :many
-SELECT id, hatchery_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at FROM hatchery
-WHERE hatchery_id = $1
+SELECT id, production_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at FROM hatchery
+WHERE production_id = $1
 ORDER BY id
 LIMIT $2
 OFFSET $3
 `
 
 type ListHatcheryParams struct {
-	HatcheryID int64 `json:"hatchery_id"`
-	Limit      int32 `json:"limit"`
-	Offset     int32 `json:"offset"`
+	ProductionID int64 `json:"production_id"`
+	Limit        int32 `json:"limit"`
+	Offset       int32 `json:"offset"`
 }
 
 func (q *Queries) ListHatchery(ctx context.Context, arg ListHatcheryParams) ([]Hatchery, error) {
-	rows, err := q.db.QueryContext(ctx, listHatchery, arg.HatcheryID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listHatchery, arg.ProductionID, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
@@ -110,7 +110,7 @@ func (q *Queries) ListHatchery(ctx context.Context, arg ListHatcheryParams) ([]H
 		var i Hatchery
 		if err := rows.Scan(
 			&i.ID,
-			&i.HatcheryID,
+			&i.ProductionID,
 			&i.Infertile,
 			&i.Early,
 			&i.Middle,
@@ -141,7 +141,7 @@ SET infertile = $2,
     dead_chicks = $6,
     alive_chicks = $7
 WHERE id = $1
-RETURNING id, hatchery_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at
+RETURNING id, production_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at
 `
 
 type UpdateHatcheryParams struct {
@@ -167,7 +167,7 @@ func (q *Queries) UpdateHatchery(ctx context.Context, arg UpdateHatcheryParams) 
 	var i Hatchery
 	err := row.Scan(
 		&i.ID,
-		&i.HatcheryID,
+		&i.ProductionID,
 		&i.Infertile,
 		&i.Early,
 		&i.Middle,
