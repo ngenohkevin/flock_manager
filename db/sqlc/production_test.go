@@ -10,7 +10,7 @@ import (
 
 func createRandomProduction(t *testing.T, breed Breed) Production {
 	arg := CreateProductionParams{
-		ProductionID: breed.BreedID,
+		BreedID:      breed.BreedID,
 		Eggs:         util.RandomProduction(),
 		Dirty:        util.RandomProduction(),
 		WrongShape:   util.RandomProduction(),
@@ -22,7 +22,7 @@ func createRandomProduction(t *testing.T, breed Breed) Production {
 	require.NoError(t, err)
 	require.NotEmpty(t, production)
 
-	require.Equal(t, arg.ProductionID, production.ProductionID)
+	require.Equal(t, arg.BreedID, production.BreedID)
 	require.Equal(t, arg.Eggs, production.Eggs)
 	require.Equal(t, arg.Dirty, production.Dirty)
 	require.Equal(t, arg.WrongShape, production.WrongShape)
@@ -46,11 +46,11 @@ func TestGetProduction(t *testing.T) {
 
 	production1 := createRandomProduction(t, breed)
 
-	production2, err := testQueries.GetProduction(context.Background(), production1.ProductionID)
+	production2, err := testQueries.GetProduction(context.Background(), production1.BreedID)
 	require.NoError(t, err)
 	require.NotEmpty(t, production2)
 
-	require.Equal(t, production1.ProductionID, production2.ProductionID)
+	require.Equal(t, production1.BreedID, production2.BreedID)
 	require.Equal(t, production1.ID, production2.ID)
 	require.Equal(t, production1.Eggs, production2.Eggs)
 	require.Equal(t, production1.Dirty, production2.Dirty)
@@ -94,14 +94,15 @@ func TestUpdateProduction(t *testing.T) {
 
 func TestListProduction(t *testing.T) {
 	breed := createdRandomBreed(t)
+
 	for i := 0; i < 10; i++ {
 		createRandomProduction(t, breed)
 	}
 
 	arg := ListProductionParams{
-		ProductionID: breed.BreedID,
-		Limit:        5,
-		Offset:       5,
+		BreedID: breed.BreedID,
+		Limit:   5,
+		Offset:  5,
 	}
 
 	production, err := testQueries.ListProduction(context.Background(), arg)
@@ -110,6 +111,7 @@ func TestListProduction(t *testing.T) {
 
 	for _, prod := range production {
 		require.NotEmpty(t, prod)
+		require.Equal(t, arg.BreedID, prod.BreedID)
 	}
 
 }
