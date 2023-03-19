@@ -64,3 +64,35 @@ func TestGetHatchery(t *testing.T) {
 
 	require.WithinDuration(t, hatchery1.CreatedAt, hatchery2.CreatedAt, time.Second)
 }
+
+func TestUpdateHatchery(t *testing.T) {
+	breed := createdRandomBreed(t)
+	production := createRandomProduction(t, breed)
+
+	hatchery1 := createRandomHatchery(t, production)
+
+	arg := UpdateHatcheryParams{
+		ID:          hatchery1.ID,
+		Infertile:   util.RandomHatchery(),
+		Early:       util.RandomHatchery(),
+		Middle:      util.RandomHatchery(),
+		Late:        util.RandomHatchery(),
+		DeadChicks:  util.RandomHatchery(),
+		AliveChicks: util.RandomHatchery(),
+	}
+
+	hatchery2, err := testQueries.UpdateHatchery(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, hatchery2)
+
+	require.Equal(t, hatchery1.ID, hatchery2.ID)
+	require.Equal(t, hatchery1.Infertile, hatchery2.Infertile)
+	require.Equal(t, hatchery1.Early, hatchery2.Early)
+	require.Equal(t, hatchery1.Middle, hatchery2.Middle)
+	require.Equal(t, hatchery1.Late, hatchery2.Late)
+	require.Equal(t, hatchery1.DeadChicks, hatchery2.DeadChicks)
+	require.Equal(t, hatchery1.AliveChicks, hatchery2.AliveChicks)
+
+	require.WithinDuration(t, hatchery1.CreatedAt, hatchery2.CreatedAt, time.Second)
+
+}
