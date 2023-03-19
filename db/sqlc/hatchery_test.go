@@ -128,9 +128,9 @@ func TestDeleteHatchery(t *testing.T) {
 	fmt.Println("Delete hatchery", err)
 	require.NoError(t, err)
 
-	hatchery2, err := testQueries.GetHatchery(context.Background(), hatchery1.ProductionID)
-	require.NoError(t, err)
-	fmt.Println("get hatchery", err)
+	hatchery2, err := testQueries.GetHatchery(context.Background(), hatchery1.ID)
+	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, hatchery2)
+	fmt.Println("get hatchery", err)
 }
