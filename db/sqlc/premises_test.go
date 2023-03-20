@@ -71,3 +71,26 @@ func TestUpdatePremise(t *testing.T) {
 	require.WithinDuration(t, premise1.CreatedAt, premise2.CreatedAt, time.Second)
 
 }
+
+func TestListPremise(t *testing.T) {
+	breed := createdRandomBreed(t)
+
+	for i := 0; i < 10; i++ {
+		createRandomPremises(t, breed)
+	}
+	arg := ListPremisesParams{
+		BreedID: breed.BreedID,
+		Limit:   5,
+		Offset:  5,
+	}
+
+	premise, err := testQueries.ListPremises(context.Background(), arg)
+	require.NoError(t, err)
+	require.Len(t, premise, 5)
+
+	for _, premises := range premise {
+		require.NotEmpty(t, premises)
+		require.Equal(t, arg.BreedID, premises.BreedID)
+	}
+
+}
