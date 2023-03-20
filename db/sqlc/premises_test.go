@@ -5,6 +5,7 @@ import (
 	"github.com/ngenohkevin/flock_manager/db/util"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 func createRandomPremises(t *testing.T, breed Breed) Premise {
@@ -30,4 +31,43 @@ func createRandomPremises(t *testing.T, breed Breed) Premise {
 func TestCreatePremise(t *testing.T) {
 	breed := createdRandomBreed(t)
 	createRandomPremises(t, breed)
+}
+
+func TestGetPremise(t *testing.T) {
+	breed := createdRandomBreed(t)
+
+	premise1 := createRandomPremises(t, breed)
+
+	premise2, err := testQueries.GetPremises(context.Background(), premise1.BreedID)
+	require.NoError(t, err)
+	require.NotEmpty(t, premise2)
+
+	require.Equal(t, premise1.BreedID, premise2.BreedID)
+	require.Equal(t, premise1.Farm, premise2.Farm)
+	require.Equal(t, premise1.House, premise2.House)
+
+	require.WithinDuration(t, premise1.CreatedAt, premise2.CreatedAt, time.Second)
+}
+
+func TestUpdatePremise(t *testing.T) {
+	breed := createdRandomBreed(t)
+
+	premise1 := createRandomPremises(t, breed)
+
+	arg := UpdatePremisesParams{
+		ID:    premise1.ID,
+		Farm:  util.RandomPremises(),
+		House: util.RandomPremises(),
+	}
+
+	premise2, err := testQueries.UpdatePremises(context.Background(), arg)
+	require.NoError(t, err)
+	require.NotEmpty(t, premise2)
+
+	require.Equal(t, arg.ID, premise2.ID)
+	require.Equal(t, arg.Farm, premise2.Farm)
+	require.Equal(t, arg.House, premise2.House)
+
+	require.WithinDuration(t, premise1.CreatedAt, premise2.CreatedAt, time.Second)
+
 }
