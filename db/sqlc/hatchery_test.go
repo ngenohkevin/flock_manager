@@ -3,7 +3,6 @@ package db
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"github.com/ngenohkevin/flock_manager/db/util"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -125,12 +124,10 @@ func TestDeleteHatchery(t *testing.T) {
 
 	hatchery1 := createRandomHatchery(t, production)
 	err := testQueries.DeleteHatchery(context.Background(), hatchery1.ID)
-	fmt.Println("Delete hatchery", err)
 	require.NoError(t, err)
 
 	hatchery2, err := testQueries.GetHatchery(context.Background(), hatchery1.ProductionID)
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, hatchery2)
-	fmt.Println("get hatchery", err)
 }
