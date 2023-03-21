@@ -121,11 +121,11 @@ func TestDeleteProduction(t *testing.T) {
 	breed := createdRandomBreed(t)
 
 	production1 := createRandomProduction(t, breed)
-	err := testQueries.DeleteProduction(context.Background(), production1.BreedID)
+	err := testQueries.DeleteProduction(context.Background(), production1.ID)
 
 	require.NoError(t, err)
 
-	production2, err := testQueries.GetProduction(context.Background(), production1.ID)
+	production2, err := testQueries.GetProduction(context.Background(), production1.BreedID)
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 
