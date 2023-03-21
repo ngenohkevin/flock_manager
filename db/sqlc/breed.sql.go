@@ -65,7 +65,7 @@ func (q *Queries) ListBreeds(ctx context.Context, arg ListBreedsParams) ([]Breed
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Breed
+	items := []Breed{}
 	for rows.Next() {
 		var i Breed
 		if err := rows.Scan(&i.BreedID, &i.BreedName, &i.CreatedAt); err != nil {

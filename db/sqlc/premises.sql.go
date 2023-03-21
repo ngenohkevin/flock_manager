@@ -83,7 +83,7 @@ func (q *Queries) ListPremises(ctx context.Context, arg ListPremisesParams) ([]P
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Premise
+	items := []Premise{}
 	for rows.Next() {
 		var i Premise
 		if err := rows.Scan(

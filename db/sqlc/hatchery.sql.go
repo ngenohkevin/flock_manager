@@ -105,7 +105,7 @@ func (q *Queries) ListHatchery(ctx context.Context, arg ListHatcheryParams) ([]H
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Hatchery
+	items := []Hatchery{}
 	for rows.Next() {
 		var i Hatchery
 		if err := rows.Scan(

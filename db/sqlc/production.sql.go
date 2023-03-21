@@ -105,7 +105,7 @@ func (q *Queries) ListProduction(ctx context.Context, arg ListProductionParams) 
 		return nil, err
 	}
 	defer rows.Close()
-	var items []Production
+	items := []Production{}
 	for rows.Next() {
 		var i Production
 		if err := rows.Scan(
