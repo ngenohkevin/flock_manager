@@ -76,6 +76,7 @@ type updateBreedRequest struct {
 	BreedName string `json:"breed_name" binding:"required"`
 }
 
+//update breeds handler
 func (server *Server) updateBreed(ctx *gin.Context) {
 	var req updateBreedRequest
 
