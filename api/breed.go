@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	db "github.com/ngenohkevin/flock_manager/db/sqlc"
 	"net/http"
+	"strconv"
 )
 
 type createBreedRequest struct {
@@ -72,4 +73,29 @@ func (server *Server) listBreeds(ctx *gin.Context) {
 }
 
 type updateBreedRequest struct {
+	BreedName string `json:"breed_name" binding:"required"`
+}
+
+func (server *Server) updateBreed(ctx *gin.Context) {
+	var req updateBreedRequest
+
+	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil || id <= 0 {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	arg := db.UpdateBreedParams{
+		BreedID:   id,
+		BreedName: req.BreedName,
+	}
+	breeds, err := server.store.UpdateBreed(ctx, arg)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, breeds)
 }
