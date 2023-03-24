@@ -5,17 +5,16 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/ngenohkevin/flock_manager/api"
 	db "github.com/ngenohkevin/flock_manager/db/sqlc"
+	"github.com/ngenohkevin/flock_manager/db/util"
 	"log"
 )
 
-const (
-	dbDriver      = "postgres"
-	dbSource      = "postgresql://root:85dilanwest@localhost:5432/flock_manager?sslmode=disable"
-	serverAddress = "0.0.0.0:8080"
-)
-
 func main() {
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot load config", err)
+	}
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("Error connecting to the database", err)
 	}
@@ -23,7 +22,7 @@ func main() {
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
 
-	err = server.Start(serverAddress)
+	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("unable to start the server", err)
 	}
