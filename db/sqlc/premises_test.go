@@ -100,11 +100,11 @@ func TestDeletePremise(t *testing.T) {
 	breed := createdRandomBreed(t)
 	premise1 := createRandomPremises(t, breed)
 
-	err := testQueries.DeletePremises(context.Background(), premise1.BreedID)
+	err := testQueries.DeletePremises(context.Background(), premise1.ID)
 
 	require.NoError(t, err)
 
-	premise2, err := testQueries.GetPremises(context.Background(), premise1.ID)
+	premise2, err := testQueries.GetPremises(context.Background(), premise1.BreedID)
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 
