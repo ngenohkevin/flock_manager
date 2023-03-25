@@ -16,6 +16,7 @@ import (
 	"testing"
 )
 
+// GetBreed tests
 func TestGetBreedAPI(t *testing.T) {
 	breed := randomBreed()
 
