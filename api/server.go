@@ -26,6 +26,7 @@ func NewServer(store db.Store) *Server {
 	return server
 }
 
+// Start Run the server
 func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }
