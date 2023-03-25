@@ -94,6 +94,7 @@ func TestGetBreedAPI(t *testing.T) {
 	}
 }
 
+// Randomise breeds
 func randomBreed() db.Breed {
 	return db.Breed{
 		BreedID:   util.RandomInt(1, 1000),
