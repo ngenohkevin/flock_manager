@@ -10,6 +10,7 @@ import (
 )
 
 func main() {
+	//connect to environment variables
 	config, err := util.LoadConfig(".")
 	if err != nil {
 		log.Fatal("cannot load config", err)
