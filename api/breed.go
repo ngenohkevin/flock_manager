@@ -30,6 +30,7 @@ type getBreedRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
+// getBreed handler
 func (server *Server) getBreed(ctx *gin.Context) {
 	var req getBreedRequest
 	if err := ctx.ShouldBindUri(&req); err != nil {
