@@ -108,6 +108,7 @@ type deleteBreedsRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
+// deleteBreed handler
 func (server *Server) deleteBreed(ctx *gin.Context) {
 	var req deleteBreedsRequest
 
