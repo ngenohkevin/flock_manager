@@ -55,6 +55,7 @@ type listBreedRequest struct {
 	PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
 }
 
+// ListBreeds handler
 func (server *Server) listBreeds(ctx *gin.Context) {
 	var req listBreedRequest
 	if err := ctx.ShouldBindQuery(&req); err != nil {
