@@ -12,6 +12,7 @@ type createBreedRequest struct {
 	Breed string `json:"breed" binding:"required"`
 }
 
+// createBreed Handler
 func (server *Server) createBreed(ctx *gin.Context) {
 	var req createBreedRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
