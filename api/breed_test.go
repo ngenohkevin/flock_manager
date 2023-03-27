@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	mockdb "github.com/ngenohkevin/flock_manager/db/mock"
 	db "github.com/ngenohkevin/flock_manager/db/sqlc"
@@ -92,6 +93,81 @@ func TestGetBreedAPI(t *testing.T) {
 			tc.checkResponse(t, recorder)
 		})
 	}
+}
+
+func TestCreateBreed(t *testing.T) {
+	breed := randomBreed()
+
+	testCases := []struct {
+		name          string
+		body          gin.H
+		buildStubs    func(store *mockdb.MockStore)
+		checkResponse func(recorder *httptest.ResponseRecorder)
+	}{
+		{
+			name: "OK",
+			body: gin.H{
+				"breed": breed.BreedName,
+			},
+			buildStubs: func(store *mockdb.MockStore) {
+				arg := breed.BreedName
+				store.EXPECT().CreateBreed(gomock.Any(), gomock.Eq(arg)).Times(1).Return(breed, nil)
+			},
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusOK, recorder.Code)
+				requireBodyMatchBreed(t, recorder.Body, breed)
+			},
+		},
+		//{
+		//	name: "NoAuthorization",
+		//	body: gin.H{
+		//		"breed": breed.BreedName,
+		//	},
+		//	buildStubs: func(store *mockdb.MockStore) {
+		//		store.EXPECT().CreateBreed(gomock.Any(), gomock.Any()).Times(0)
+		//	},
+		//	checkResponse: func(recorder *httptest.ResponseRecorder) {
+		//		require.Equal(t, http.StatusUnauthorized, recorder.Code)
+		//	},
+		//},
+		{
+			name: "InternalError",
+			body: gin.H{
+				"breed": breed.BreedName,
+			},
+			buildStubs: func(store *mockdb.MockStore) {
+				store.EXPECT().CreateBreed(gomock.Any(), gomock.Any()).Times(1).Return(db.Breed{}, sql.ErrConnDone)
+			},
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusInternalServerError, recorder.Code)
+			},
+		},
+	}
+	for i := range testCases {
+		tc := testCases[i]
+
+		t.Run(tc.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			store := mockdb.NewMockStore(ctrl)
+			tc.buildStubs(store)
+
+			server := NewServer(store)
+			recorder := httptest.NewRecorder()
+
+			data, err := json.Marshal(tc.body)
+			require.NoError(t, err)
+
+			url := "/breeds"
+			request, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
+			require.NoError(t, err)
+
+			server.router.ServeHTTP(recorder, request)
+			tc.checkResponse(recorder)
+		})
+	}
+
 }
 
 // Randomise breeds
