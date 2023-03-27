@@ -169,6 +169,8 @@ func TestCreateBreed(t *testing.T) {
 	}
 
 }
+
+// TestListBreedsAPI mocks the API
 func TestListBreedsAPI(t *testing.T) {
 	n := 5
 	breeds := make([]db.Breed, n)
