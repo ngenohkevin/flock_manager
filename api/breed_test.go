@@ -95,7 +95,11 @@ func TestGetBreedAPI(t *testing.T) {
 	}
 }
 
+<<<<<<< HEAD
 func TestCreateBreed(t *testing.T) {
+=======
+func TestCreateBreedAPI(t *testing.T) {
+>>>>>>> 4157627 (re initialized git)
 	breed := randomBreed()
 
 	testCases := []struct {
@@ -170,6 +174,130 @@ func TestCreateBreed(t *testing.T) {
 
 }
 
+<<<<<<< HEAD
+=======
+func TestListBreedsAPI(t *testing.T) {
+	n := 5
+	breeds := make([]db.Breed, n)
+	for i := 0; i < n; i++ {
+		breeds[i] = randomBreed()
+	}
+	type Query struct {
+		pageID   int
+		pageSize int
+	}
+
+	testCases := []struct {
+		name          string
+		query         Query
+		buildStubs    func(store *mockdb.MockStore)
+		checkResponse func(recorder *httptest.ResponseRecorder)
+	}{
+		{
+			name: "OK",
+			query: Query{
+				pageID:   1,
+				pageSize: n,
+			},
+			buildStubs: func(store *mockdb.MockStore) {
+				arg := db.ListBreedsParams{
+					Limit:  int32(n),
+					Offset: 0,
+				}
+				store.EXPECT().ListBreeds(gomock.Any(), gomock.Eq(arg)).
+					Times(1).Return(breeds, nil)
+			},
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusOK, recorder.Code)
+				requireBodyMatchBreeds(t, recorder.Body, breeds)
+			},
+		},
+		//{
+		//	name: "NoAuthorization",
+		//	query: Query{
+		//		pageID:   1,
+		//		pageSize: n,
+		//	},
+		//	buildStubs: func(store *mockdb.MockStore) {
+		//		store.EXPECT().ListBreeds(gomock.Any(), gomock.Any()).Times(0)
+		//	},
+		//	checkResponse: func(recorder *httptest.ResponseRecorder) {
+		//		require.Equal(t, http.StatusUnauthorized, recorder.Code)
+		//	},
+		//},
+		{
+			name: "InternalError",
+			query: Query{
+				pageID:   1,
+				pageSize: n,
+			},
+			buildStubs: func(store *mockdb.MockStore) {
+				store.EXPECT().ListBreeds(gomock.Any(), gomock.Any()).
+					Times(1).Return([]db.Breed{}, sql.ErrConnDone)
+			},
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusInternalServerError, recorder.Code)
+			},
+		},
+		{
+			name: "InvalidPageID",
+			query: Query{
+				pageID:   -1,
+				pageSize: n,
+			},
+			buildStubs: func(store *mockdb.MockStore) {
+				store.EXPECT().
+					ListBreeds(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusBadRequest, recorder.Code)
+			},
+		},
+		{
+			name: "InvalidPageSize",
+			query: Query{
+				pageID:   1,
+				pageSize: 100000,
+			},
+			buildStubs: func(store *mockdb.MockStore) {
+				store.EXPECT().
+					ListBreeds(gomock.Any(), gomock.Any()).
+					Times(0)
+			},
+			checkResponse: func(recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusBadRequest, recorder.Code)
+			},
+		},
+	}
+	for i := range testCases {
+		tc := testCases[i]
+
+		t.Run(tc.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			store := mockdb.NewMockStore(ctrl)
+			tc.buildStubs(store)
+
+			server := NewServer(store)
+			recorder := httptest.NewRecorder()
+
+			request, err := http.NewRequest(http.MethodGet, "/breeds", nil)
+			require.NoError(t, err)
+
+			q := request.URL.Query()
+			q.Add("page_id", fmt.Sprintf("%d", tc.query.pageID))
+			q.Add("page_size", fmt.Sprintf("%d", tc.query.pageSize))
+			request.URL.RawQuery = q.Encode()
+
+			server.router.ServeHTTP(recorder, request)
+			tc.checkResponse(recorder)
+		})
+	}
+}
+
+>>>>>>> 4157627 (re initialized git)
 // Randomise breeds
 func randomBreed() db.Breed {
 	return db.Breed{
@@ -187,3 +315,16 @@ func requireBodyMatchBreed(t *testing.T, body *bytes.Buffer, breed db.Breed) {
 	require.NoError(t, err)
 	require.Equal(t, breed, gotBreed)
 }
+<<<<<<< HEAD
+=======
+
+func requireBodyMatchBreeds(t *testing.T, body *bytes.Buffer, accounts []db.Breed) {
+	data, err := io.ReadAll(body)
+	require.NoError(t, err)
+
+	var gotAccounts []db.Breed
+	err = json.Unmarshal(data, &gotAccounts)
+	require.NoError(t, err)
+	require.Equal(t, accounts, gotAccounts)
+}
+>>>>>>> 4157627 (re initialized git)
