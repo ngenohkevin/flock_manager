@@ -95,11 +95,7 @@ func TestGetBreedAPI(t *testing.T) {
 	}
 }
 
-<<<<<<< HEAD
 func TestCreateBreed(t *testing.T) {
-=======
-func TestCreateBreedAPI(t *testing.T) {
->>>>>>> 4157627 (re initialized git)
 	breed := randomBreed()
 
 	testCases := []struct {
@@ -173,9 +169,6 @@ func TestCreateBreedAPI(t *testing.T) {
 	}
 
 }
-
-<<<<<<< HEAD
-=======
 func TestListBreedsAPI(t *testing.T) {
 	n := 5
 	breeds := make([]db.Breed, n)
@@ -297,7 +290,6 @@ func TestListBreedsAPI(t *testing.T) {
 	}
 }
 
->>>>>>> 4157627 (re initialized git)
 // Randomise breeds
 func randomBreed() db.Breed {
 	return db.Breed{
@@ -315,8 +307,6 @@ func requireBodyMatchBreed(t *testing.T, body *bytes.Buffer, breed db.Breed) {
 	require.NoError(t, err)
 	require.Equal(t, breed, gotBreed)
 }
-<<<<<<< HEAD
-=======
 
 func requireBodyMatchBreeds(t *testing.T, body *bytes.Buffer, accounts []db.Breed) {
 	data, err := io.ReadAll(body)
@@ -327,4 +317,3 @@ func requireBodyMatchBreeds(t *testing.T, body *bytes.Buffer, accounts []db.Bree
 	require.NoError(t, err)
 	require.Equal(t, accounts, gotAccounts)
 }
->>>>>>> 4157627 (re initialized git)
