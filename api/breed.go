@@ -105,7 +105,8 @@ func (server *Server) updateBreed(ctx *gin.Context) {
 }
 
 type deleteBreedsRequest struct {
-	ID int64 `uri:"id" binding:"required,min=1"`
+	ID      int64 `uri:"id" binding:"required,min=1"`
+	BreedID int64 `uri:"id" binding:"required,min=1"`
 }
 
 // deleteBreed handler
@@ -117,7 +118,7 @@ func (server *Server) deleteBreed(ctx *gin.Context) {
 		return
 	}
 
-	err := server.store.DeleteBreed(ctx, req.ID)
+	_, err := server.store.GetBreed(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
@@ -126,6 +127,25 @@ func (server *Server) deleteBreed(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+
+	// Delete production row first before proceeding to delete breed
+	err = server.store.DeleteProduction(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	err = server.store.DeleteBreed(ctx, req.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{
 		"success": "Deleted",
 	})
