@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"github.com/gin-gonic/gin"
 	db "github.com/ngenohkevin/flock_manager/db/sqlc"
 	"net/http"
@@ -34,6 +35,29 @@ func (server *Server) createProduction(ctx *gin.Context) {
 	}
 	prod, err := server.store.CreateProduction(ctx, arg)
 	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, prod)
+}
+
+type getProductionRequest struct {
+	ID int64 `uri:"id" binding:"required,min=1"`
+}
+
+func (server *Server) getProduction(ctx *gin.Context) {
+	var req getProductionRequest
+
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	prod, err := server.store.GetProduction(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
