@@ -23,8 +23,8 @@ func NewServer(store db.Store) *Server {
 	router.DELETE("/breeds/:id", server.deleteBreed)
 
 	//Production Routes
-
 	router.POST("/production", server.createProduction)
+	router.GET("/production/:id", server.getProduction)
 
 	server.router = router
 	return server
