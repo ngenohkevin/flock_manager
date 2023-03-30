@@ -117,34 +117,28 @@ func (server *Server) deleteBreed(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-
-	_, err := server.store.GetBreed(ctx, req.ID)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
-			return
-		}
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return
-	}
-
 	// Delete production row first before proceeding to delete breed
-	err = server.store.DeleteProduction(ctx, req.ID)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			ctx.JSON(http.StatusNotFound, errorResponse(err))
-			return
-		}
-
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return
-	}
-
-	err = server.store.DeleteBreed(ctx, req.ID)
+	err := server.store.DeleteProduction(ctx, req.ID)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+
+	//_, err = server.store.GetBreed(ctx, req.ID)
+	//if err != nil {
+	//	if err == sql.ErrNoRows {
+	//		ctx.JSON(http.StatusNotFound, errorResponse(err))
+	//		return
+	//	}
+	//	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+	//	return
+	//}
+
+	//err = server.store.DeleteBreed(ctx, req.ID)
+	//if err != nil {
+	//	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+	//	return
+	//}
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"success": "Deleted",
