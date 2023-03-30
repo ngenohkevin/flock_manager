@@ -87,4 +87,3 @@ func (server *Server) listProduction(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, prod)
 }
-
