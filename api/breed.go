@@ -124,15 +124,15 @@ func (server *Server) deleteBreed(ctx *gin.Context) {
 		return
 	}
 
-	//_, err = server.store.GetBreed(ctx, req.ID)
-	//if err != nil {
-	//	if err == sql.ErrNoRows {
-	//		ctx.JSON(http.StatusNotFound, errorResponse(err))
-	//		return
-	//	}
-	//	ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-	//	return
-	//}
+	_, err = server.store.GetBreed(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
 
 	//err = server.store.DeleteBreed(ctx, req.ID)
 	//if err != nil {
