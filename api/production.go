@@ -17,6 +17,7 @@ type createProductionRequest struct {
 	HatchingEggs int64 `json:"hatching_eggs" binding:"required"`
 }
 
+//create production handler
 
 func (server *Server) createProduction(ctx *gin.Context) {
 	var req createProductionRequest
