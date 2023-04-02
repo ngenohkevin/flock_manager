@@ -46,6 +46,7 @@ func (server *Server) createProduction(ctx *gin.Context) {
 type getProductionRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
+//get production handler
 
 func (server *Server) getProduction(ctx *gin.Context) {
 	var req getProductionRequest
