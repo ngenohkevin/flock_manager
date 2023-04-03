@@ -123,7 +123,7 @@ func (server *Server) deleteBreed(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
-
+	//Show if there's any breed before deleting
 	_, err = server.store.GetBreed(ctx, req.ID)
 	if err != nil {
 		if err == sql.ErrNoRows {
