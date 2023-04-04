@@ -65,11 +65,11 @@ func (q *Queries) DeleteProduction(ctx context.Context, id int64) error {
 
 const getProduction = `-- name: GetProduction :one
 SELECT id, breed_id, eggs, dirty, wrong_shape, weak_shell, damaged, hatching_eggs, created_at FROM production
-WHERE breed_id = $1 LIMIT 1
+WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetProduction(ctx context.Context, breedID int64) (Production, error) {
-	row := q.db.QueryRowContext(ctx, getProduction, breedID)
+func (q *Queries) GetProduction(ctx context.Context, id int64) (Production, error) {
+	row := q.db.QueryRowContext(ctx, getProduction, id)
 	var i Production
 	err := row.Scan(
 		&i.ID,
@@ -87,20 +87,18 @@ func (q *Queries) GetProduction(ctx context.Context, breedID int64) (Production,
 
 const listProduction = `-- name: ListProduction :many
 SELECT id, breed_id, eggs, dirty, wrong_shape, weak_shell, damaged, hatching_eggs, created_at FROM production
-WHERE breed_id = $1
 ORDER BY id
-LIMIT $2
-OFFSET $3
+LIMIT $1
+OFFSET $2
 `
 
 type ListProductionParams struct {
-	BreedID int64 `json:"breed_id"`
-	Limit   int32 `json:"limit"`
-	Offset  int32 `json:"offset"`
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
 }
 
 func (q *Queries) ListProduction(ctx context.Context, arg ListProductionParams) ([]Production, error) {
-	rows, err := q.db.QueryContext(ctx, listProduction, arg.BreedID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listProduction, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
