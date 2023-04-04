@@ -47,7 +47,7 @@ func TestGetProduction(t *testing.T) {
 
 	production1 := createRandomProduction(t, breed)
 
-	production2, err := testQueries.GetProduction(context.Background(), production1.BreedID)
+	production2, err := testQueries.GetProduction(context.Background(), production1.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, production2)
 
@@ -101,9 +101,8 @@ func TestListProduction(t *testing.T) {
 	}
 
 	arg := ListProductionParams{
-		BreedID: breed.BreedID,
-		Limit:   5,
-		Offset:  5,
+		Limit:  5,
+		Offset: 5,
 	}
 
 	production, err := testQueries.ListProduction(context.Background(), arg)
@@ -112,7 +111,6 @@ func TestListProduction(t *testing.T) {
 
 	for _, prod := range production {
 		require.NotEmpty(t, prod)
-		require.Equal(t, arg.BreedID, prod.BreedID)
 	}
 
 }
