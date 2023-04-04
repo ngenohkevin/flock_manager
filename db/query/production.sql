@@ -8,14 +8,13 @@ INSERT INTO production (
 
 -- name: GetProduction :one
 SELECT * FROM production
-WHERE breed_id = $1 LIMIT 1;
+WHERE id = $1 LIMIT 1;
 
 -- name: ListProduction :many
 SELECT * FROM production
-WHERE breed_id = $1
 ORDER BY id
-LIMIT $2
-OFFSET $3;
+LIMIT $1
+OFFSET $2;
 
 -- name: UpdateProduction :one
 UPDATE production
