@@ -79,15 +79,15 @@ type listProductionRequest struct {
 func (server *Server) listProduction(ctx *gin.Context) {
 	var req listProductionRequest
 
-	if err := ctx.ShouldBindJSON(&req); err != nil {
+	if err := ctx.ShouldBindQuery(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	arg := db.ListBreedsParams{
+	arg := db.ListProductionParams{
 		Limit:  req.PageSize,
 		Offset: (req.PageID - 1) * req.PageSize,
 	}
-	prod, err := server.store.ListBreeds(ctx, arg)
+	prod, err := server.store.ListProduction(ctx, arg)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
