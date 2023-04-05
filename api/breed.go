@@ -126,6 +126,13 @@ func (server *Server) deleteBreed(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+	//Delete the hatchery
+	err = server.store.DeleteHatchery(ctx, req.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
 	//Delete the production first
 	err = server.store.DeleteProduction(ctx, req.ID)
 	if err != nil {
