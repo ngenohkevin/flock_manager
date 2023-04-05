@@ -6,7 +6,7 @@ CREATE TABLE "breed" (
 
 CREATE TABLE "production" (
                               "id" BIGSERIAL PRIMARY KEY,
-                              "breed_id" bigint NOT NULL,
+                              "breed_id" bigint UNIQUE NOT NULL,
                               "eggs" bigint NOT NULL,
                               "dirty" bigint NOT NULL,
                               "wrong_shape" bigint NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE "production" (
 
 CREATE TABLE "hatchery" (
                             "id" BIGSERIAL PRIMARY KEY,
-                            "production_id" bigint NOT NULL,
+                            "production_id" bigint UNIQUE NOT NULL,
                             "infertile" bigint NOT NULL,
                             "early" bigint NOT NULL,
                             "middle" bigint NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE "hatchery" (
 
 CREATE TABLE "premises" (
                             "id" BIGSERIAL PRIMARY KEY,
-                            "breed_id" bigint NOT NULL,
+                            "breed_id" bigint UNIQUE NOT NULL,
                             "farm" varchar NOT NULL,
                             "house" varchar NOT NULL,
                             "created_at" timestamptz NOT NULL DEFAULT (now())
