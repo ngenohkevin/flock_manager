@@ -20,6 +20,7 @@ func createRandomProduction(t *testing.T, breed Breed) Production {
 		HatchingEggs: util.RandomProduction(),
 	}
 	production, err := testQueries.CreateProduction(context.Background(), arg)
+
 	require.NoError(t, err)
 	require.NotEmpty(t, production)
 
@@ -94,10 +95,11 @@ func TestUpdateProduction(t *testing.T) {
 }
 
 func TestListProduction(t *testing.T) {
-	breed := createdRandomBreed(t)
 
 	for i := 0; i < 10; i++ {
+		breed := createdRandomBreed(t)
 		createRandomProduction(t, breed)
+
 	}
 
 	arg := ListProductionParams{
