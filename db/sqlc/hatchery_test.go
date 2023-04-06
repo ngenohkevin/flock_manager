@@ -51,7 +51,7 @@ func TestGetHatchery(t *testing.T) {
 
 	hatchery1 := createRandomHatchery(t, production)
 
-	hatchery2, err := testQueries.GetHatchery(context.Background(), hatchery1.ProductionID)
+	hatchery2, err := testQueries.GetHatchery(context.Background(), hatchery1.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, hatchery2)
 
@@ -98,16 +98,15 @@ func TestUpdateHatchery(t *testing.T) {
 
 }
 func TestListHatchery(t *testing.T) {
-	breed := createdRandomBreed(t)
-	production := createRandomProduction(t, breed)
 
 	for i := 0; i < 10; i++ {
-		createRandomHatchery(t, production)
+		breed := createdRandomBreed(t)
+		prod := createRandomProduction(t, breed)
+		createRandomHatchery(t, prod)
 	}
 	arg := ListHatcheryParams{
-		ProductionID: production.ID,
-		Limit:        5,
-		Offset:       5,
+		Limit:  5,
+		Offset: 5,
 	}
 	hatchery, err := testQueries.ListHatchery(context.Background(), arg)
 	require.NoError(t, err)
@@ -115,7 +114,6 @@ func TestListHatchery(t *testing.T) {
 
 	for _, hatcheries := range hatchery {
 		require.NotEmpty(t, hatcheries)
-		require.Equal(t, arg.ProductionID, hatcheries.ProductionID)
 	}
 }
 func TestDeleteHatchery(t *testing.T) {
