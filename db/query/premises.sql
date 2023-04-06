@@ -6,14 +6,13 @@ RETURNING *;
 
 -- name: GetPremises :one
 SELECT * FROM premises
-WHERE breed_id = $1 LIMIT 1;
+WHERE id = $1 LIMIT 1;
 
 -- name: ListPremises :many
 SELECT * FROM premises
-WHERE breed_id = $1
 ORDER BY id
-LIMIT $2
-OFFSET $3;
+LIMIT $1
+OFFSET $2;
 
 -- name: UpdatePremises :one
 UPDATE premises
