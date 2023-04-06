@@ -65,11 +65,11 @@ func (q *Queries) DeleteHatchery(ctx context.Context, id int64) error {
 
 const getHatchery = `-- name: GetHatchery :one
 SELECT id, production_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at FROM hatchery
-WHERE production_id = $1 LIMIT 1
+WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetHatchery(ctx context.Context, productionID int64) (Hatchery, error) {
-	row := q.db.QueryRowContext(ctx, getHatchery, productionID)
+func (q *Queries) GetHatchery(ctx context.Context, id int64) (Hatchery, error) {
+	row := q.db.QueryRowContext(ctx, getHatchery, id)
 	var i Hatchery
 	err := row.Scan(
 		&i.ID,
@@ -87,20 +87,18 @@ func (q *Queries) GetHatchery(ctx context.Context, productionID int64) (Hatchery
 
 const listHatchery = `-- name: ListHatchery :many
 SELECT id, production_id, infertile, early, middle, late, dead_chicks, alive_chicks, created_at FROM hatchery
-WHERE production_id = $1
 ORDER BY id
-LIMIT $2
-OFFSET $3
+LIMIT $1
+OFFSET $2
 `
 
 type ListHatcheryParams struct {
-	ProductionID int64 `json:"production_id"`
-	Limit        int32 `json:"limit"`
-	Offset       int32 `json:"offset"`
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
 }
 
 func (q *Queries) ListHatchery(ctx context.Context, arg ListHatcheryParams) ([]Hatchery, error) {
-	rows, err := q.db.QueryContext(ctx, listHatchery, arg.ProductionID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listHatchery, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
