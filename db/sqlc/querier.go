@@ -18,9 +18,9 @@ type Querier interface {
 	DeletePremises(ctx context.Context, id int64) error
 	DeleteProduction(ctx context.Context, id int64) error
 	GetBreed(ctx context.Context, breedID int64) (Breed, error)
-	GetHatchery(ctx context.Context, productionID int64) (Hatchery, error)
-	GetPremises(ctx context.Context, breedID int64) (Premise, error)
-	GetProduction(ctx context.Context, breedID int64) (Production, error)
+	GetHatchery(ctx context.Context, id int64) (Hatchery, error)
+	GetPremises(ctx context.Context, id int64) (Premise, error)
+	GetProduction(ctx context.Context, id int64) (Production, error)
 	ListBreeds(ctx context.Context, arg ListBreedsParams) ([]Breed, error)
 	ListHatchery(ctx context.Context, arg ListHatcheryParams) ([]Hatchery, error)
 	ListPremises(ctx context.Context, arg ListPremisesParams) ([]Premise, error)
