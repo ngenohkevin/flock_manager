@@ -47,11 +47,11 @@ func (q *Queries) DeletePremises(ctx context.Context, id int64) error {
 
 const getPremises = `-- name: GetPremises :one
 SELECT id, breed_id, farm, house, created_at FROM premises
-WHERE breed_id = $1 LIMIT 1
+WHERE id = $1 LIMIT 1
 `
 
-func (q *Queries) GetPremises(ctx context.Context, breedID int64) (Premise, error) {
-	row := q.db.QueryRowContext(ctx, getPremises, breedID)
+func (q *Queries) GetPremises(ctx context.Context, id int64) (Premise, error) {
+	row := q.db.QueryRowContext(ctx, getPremises, id)
 	var i Premise
 	err := row.Scan(
 		&i.ID,
@@ -65,20 +65,18 @@ func (q *Queries) GetPremises(ctx context.Context, breedID int64) (Premise, erro
 
 const listPremises = `-- name: ListPremises :many
 SELECT id, breed_id, farm, house, created_at FROM premises
-WHERE breed_id = $1
 ORDER BY id
-LIMIT $2
-OFFSET $3
+LIMIT $1
+OFFSET $2
 `
 
 type ListPremisesParams struct {
-	BreedID int64 `json:"breed_id"`
-	Limit   int32 `json:"limit"`
-	Offset  int32 `json:"offset"`
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
 }
 
 func (q *Queries) ListPremises(ctx context.Context, arg ListPremisesParams) ([]Premise, error) {
-	rows, err := q.db.QueryContext(ctx, listPremises, arg.BreedID, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listPremises, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
