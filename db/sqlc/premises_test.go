@@ -39,7 +39,7 @@ func TestGetPremise(t *testing.T) {
 
 	premise1 := createRandomPremises(t, breed)
 
-	premise2, err := testQueries.GetPremises(context.Background(), premise1.BreedID)
+	premise2, err := testQueries.GetPremises(context.Background(), premise1.ID)
 	require.NoError(t, err)
 	require.NotEmpty(t, premise2)
 
@@ -74,15 +74,14 @@ func TestUpdatePremise(t *testing.T) {
 }
 
 func TestListPremise(t *testing.T) {
-	breed := createdRandomBreed(t)
 
 	for i := 0; i < 10; i++ {
+		breed := createdRandomBreed(t)
 		createRandomPremises(t, breed)
 	}
 	arg := ListPremisesParams{
-		BreedID: breed.BreedID,
-		Limit:   5,
-		Offset:  5,
+		Limit:  5,
+		Offset: 5,
 	}
 
 	premise, err := testQueries.ListPremises(context.Background(), arg)
@@ -91,7 +90,6 @@ func TestListPremise(t *testing.T) {
 
 	for _, premises := range premise {
 		require.NotEmpty(t, premises)
-		require.Equal(t, arg.BreedID, premises.BreedID)
 	}
 
 }
