@@ -26,6 +26,7 @@ func NewServer(store db.Store) *Server {
 	router.POST("/production", server.createProduction)
 	router.GET("/production/:id", server.getProduction)
 	router.GET("/production", server.listProduction)
+	router.PUT("/production/:id", server.updateProduction)
 
 	server.router = router
 	return server
@@ -35,7 +36,8 @@ func NewServer(store db.Store) *Server {
 func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }
-//errors 
+
+// errors
 func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
 }
