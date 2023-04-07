@@ -44,8 +44,8 @@ CREATE INDEX ON "hatchery" ("production_id");
 
 CREATE INDEX ON "premises" ("breed_id");
 
-ALTER TABLE "production" ADD FOREIGN KEY ("breed_id") REFERENCES "breed" ("breed_id");
+ALTER TABLE "production" ADD FOREIGN KEY ("breed_id") REFERENCES "breed" ("breed_id") ON DELETE CASCADE;
 
-ALTER TABLE "hatchery" ADD FOREIGN KEY ("production_id") REFERENCES "production" ("id");
+ALTER TABLE "hatchery" ADD FOREIGN KEY ("production_id") REFERENCES "production" ("id") ON DELETE CASCADE;
 
-ALTER TABLE "premises" ADD FOREIGN KEY ("breed_id") REFERENCES "breed" ("breed_id");
+ALTER TABLE "premises" ADD FOREIGN KEY ("breed_id") REFERENCES "breed" ("breed_id") ON DELETE CASCADE;
