@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	db "github.com/ngenohkevin/flock_manager/db/sqlc"
 	"net/http"
+	"strconv"
 )
 
 type createProductionRequest struct {
@@ -74,10 +75,6 @@ type listProductionRequest struct {
 	PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
 }
 
-type listIDProduction struct {
-	ID int64 `json:"id"  binding:"required"`
-}
-
 func (server *Server) listProduction(ctx *gin.Context) {
 	var req listProductionRequest
 
@@ -95,4 +92,44 @@ func (server *Server) listProduction(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, prod)
+}
+
+type updateProductionRequest struct {
+	Eggs         int64 `json:"eggs" binding:"required"`
+	Dirty        int64 `json:"dirty" binding:"required"`
+	WrongShape   int64 `json:"wrong_shape" binding:"required"`
+	WeakShell    int64 `json:"weak_shell" binding:"required"`
+	Damaged      int64 `json:"damaged" binding:"required"`
+	HatchingEggs int64 `json:"hatching_eggs" binding:"required"`
+}
+
+func (server *Server) updateProduction(ctx *gin.Context) {
+	var req updateProductionRequest
+
+	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
+	if err != nil || id <= 0 {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	arg := db.UpdateProductionParams{
+		ID:           id,
+		Eggs:         req.Eggs,
+		Dirty:        req.Dirty,
+		WrongShape:   req.WrongShape,
+		WeakShell:    req.WeakShell,
+		Damaged:      req.Damaged,
+		HatchingEggs: req.HatchingEggs,
+	}
+	prod, err := server.store.UpdateProduction(ctx, arg)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, prod)
+
 }
