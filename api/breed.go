@@ -106,7 +106,6 @@ func (server *Server) updateBreed(ctx *gin.Context) {
 
 type deleteBreedsRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
-	//BreedID int64 `uri:"id" binding:"required,min=1"`
 }
 
 // deleteBreed handler
@@ -123,19 +122,6 @@ func (server *Server) deleteBreed(ctx *gin.Context) {
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return
 		}
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return
-	}
-	//Delete the hatchery
-	err = server.store.DeleteHatchery(ctx, req.ID)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
-		return
-	}
-
-	//Delete the production first
-	err = server.store.DeleteProduction(ctx, req.ID)
-	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
