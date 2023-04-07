@@ -78,21 +78,13 @@ type listIDProduction struct {
 	ID int64 `json:"id"  binding:"required"`
 }
 
-//list production handler
-//todo: issue with listing production
-
 func (server *Server) listProduction(ctx *gin.Context) {
 	var req listProductionRequest
-	//var id listIDProduction
 
 	if err := ctx.ShouldBindQuery(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	//if err := ctx.ShouldBindUri(&id); err != nil {
-	//	ctx.JSON(http.StatusBadRequest, errorResponse(err))
-	//	return
-	//}
 	arg := db.ListProductionParams{
 		Limit:  req.PageSize,
 		Offset: (req.PageID - 1) * req.PageSize,
