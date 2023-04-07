@@ -133,3 +133,36 @@ func (server *Server) updateProduction(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, prod)
 
 }
+
+type deleteProductionRequest struct {
+	ID int64 `uri:"id" binding:"required,min=1"`
+}
+
+func (server *Server) deleteProduction(ctx *gin.Context) {
+	var req deleteProductionRequest
+
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+
+	_, err := server.store.GetProduction(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	err = server.store.DeleteProduction(ctx, req.ID)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"Success": "Deleted",
+	})
+}
