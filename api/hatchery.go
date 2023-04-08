@@ -1,6 +1,7 @@
 package api
 
 import (
+	"database/sql"
 	"github.com/gin-gonic/gin"
 	db "github.com/ngenohkevin/flock_manager/db/sqlc"
 	"net/http"
@@ -39,4 +40,28 @@ func (server *Server) createHatchery(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, hatchery)
+}
+
+type getHatcheryRequest struct {
+	ID int64 `uri:"id" binding:"required,min=1"`
+}
+
+func (server *Server) getHatchery(ctx *gin.Context) {
+	var req getHatcheryRequest
+
+	if err := ctx.ShouldBindUri(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		return
+	}
+	hatchery, err := server.store.GetHatchery(ctx, req.ID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			ctx.JSON(http.StatusNotFound, errorResponse(err))
+			return
+		}
+		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, hatchery)
+
 }
