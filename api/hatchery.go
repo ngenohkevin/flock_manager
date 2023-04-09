@@ -17,6 +17,7 @@ type createHatcheryRequest struct {
 	AliveChicks  int64 `json:"alive_chicks" binding:"required"`
 }
 
+// create hatchery handler
 func (server *Server) createHatchery(ctx *gin.Context) {
 	var req createHatcheryRequest
 
