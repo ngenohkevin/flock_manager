@@ -75,6 +75,7 @@ type listProductionRequest struct {
 	PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
 }
 
+// get production handler by page size and id
 func (server *Server) listProduction(ctx *gin.Context) {
 	var req listProductionRequest
 
