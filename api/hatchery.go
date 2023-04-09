@@ -46,6 +46,7 @@ type getHatcheryRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
+// get hatchery handler
 func (server *Server) getHatchery(ctx *gin.Context) {
 	var req getHatcheryRequest
 
