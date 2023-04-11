@@ -139,6 +139,8 @@ type deleteProductionRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
+//deleteProduction handler
+
 func (server *Server) deleteProduction(ctx *gin.Context) {
 	var req deleteProductionRequest
 
