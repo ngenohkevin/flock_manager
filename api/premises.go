@@ -69,6 +69,7 @@ type listPremisesRequest struct {
 	PageSize int32 `form:"page_size" binding:"required,min=5,max=10"`
 }
 
+// ListPremises handler{get request}
 func (server *Server) listPremises(ctx *gin.Context) {
 	var req listPremisesRequest
 
