@@ -41,6 +41,7 @@ type getPremisesRequest struct {
 	ID int64 `uri:"id" binding:"required,min=1"`
 }
 
+// getPremise handler
 func (server *Server) getPremise(ctx *gin.Context) {
 	var req getPremisesRequest
 
