@@ -14,6 +14,7 @@ type createPremisesRequest struct {
 	House   string `json:"house" binding:"required"`
 }
 
+// createPremise Handler {post request}
 func (server *Server) createPremise(ctx *gin.Context) {
 	var req createPremisesRequest
 
