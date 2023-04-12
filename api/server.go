@@ -35,7 +35,7 @@ func NewServer(store db.Store) *Server {
 	router.GET("/hatchery", server.listHatchery)
 	router.PUT("/hatchery/:id", server.updateHatchery)
 	router.DELETE("/hatchery/:id", server.deleteHatchery)
-
+ù
 	//Premises Routes
 	router.POST("/premise", server.createPremise)
 	router.GET("/premise/:id", server.getPremise)
