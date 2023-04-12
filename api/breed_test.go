@@ -72,7 +72,6 @@ func TestGetBreedAPI(t *testing.T) {
 			},
 		},
 	}
-	//for loop
 
 	for i := range testCases {
 		tc := testCases[i]
