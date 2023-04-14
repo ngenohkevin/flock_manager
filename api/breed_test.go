@@ -310,12 +310,12 @@ func requireBodyMatchBreed(t *testing.T, body *bytes.Buffer, breed db.Breed) {
 	require.Equal(t, breed, gotBreed)
 }
 
-func requireBodyMatchBreeds(t *testing.T, body *bytes.Buffer, accounts []db.Breed) {
+func requireBodyMatchBreeds(t *testing.T, body *bytes.Buffer, breed []db.Breed) {
 	data, err := io.ReadAll(body)
 	require.NoError(t, err)
 
-	var gotAccounts []db.Breed
-	err = json.Unmarshal(data, &gotAccounts)
+	var gotBreeds []db.Breed
+	err = json.Unmarshal(data, &gotBreeds)
 	require.NoError(t, err)
-	require.Equal(t, accounts, gotAccounts)
+	require.Equal(t, breed, gotBreeds)
 }
