@@ -93,6 +93,88 @@ func TestGetProductionAPI(t *testing.T) {
 	}
 }
 
+//func TestCreateProduction(t *testing.T) {
+//	prod := randomProduction()
+//
+//	testCases := []struct {
+//		name          string
+//		body          gin.H
+//		buildStubs    func(store *mockdb.MockStore)
+//		checkResponse func(recorder *httptest.ResponseRecorder)
+//	}{
+//		{
+//			name: "OK",
+//			body: gin.H{
+//				"breed_id":      prod.BreedID,
+//				"eggs":          prod.Eggs,
+//				"dirty":         prod.Dirty,
+//				"wrong_shape":   prod.WrongShape,
+//				"weak_shell":    prod.WeakShell,
+//				"damaged":       prod.Damaged,
+//				"hatching_eggs": prod.HatchingEggs,
+//			},
+//			buildStubs: func(store *mockdb.MockStore) {
+//				arg := db.CreateProductionParams{
+//					BreedID:      prod.BreedID,
+//					Eggs:         prod.Eggs,
+//					Dirty:        prod.Dirty,
+//					WrongShape:   prod.WrongShape,
+//					WeakShell:    prod.WeakShell,
+//					Damaged:      prod.Damaged,
+//					HatchingEggs: prod.HatchingEggs,
+//				}
+//				store.EXPECT().CreateProduction(gomock.Any(), gomock.Eq(arg)).Times(1).Return(prod, nil)
+//			},
+//			checkResponse: func(recorder *httptest.ResponseRecorder) {
+//				require.Equal(t, http.StatusOK, recorder.Code)
+//				requireBodyMatchProd(t, recorder.Body, prod)
+//			},
+//		},
+//		{
+//			name: "InternalError",
+//			body: gin.H{
+//				"breed_id":      prod.BreedID,
+//				"eggs":          prod.Eggs,
+//				"dirty":         prod.Dirty,
+//				"wrong_shape":   prod.WrongShape,
+//				"weak_shell":    prod.WeakShell,
+//				"damaged":       prod.Damaged,
+//				"hatching_eggs": prod.HatchingEggs,
+//			},
+//			buildStubs: func(store *mockdb.MockStore) {
+//				store.EXPECT().CreateProduction(gomock.Any(), gomock.Any()).Times(1).Return(db.Production{}, sql.ErrConnDone)
+//			},
+//			checkResponse: func(recorder *httptest.ResponseRecorder) {
+//				require.Equal(t, http.StatusInternalServerError, recorder.Code)
+//			},
+//		},
+//	}
+//	for i := range testCases {
+//		tc := testCases[i]
+//
+//		t.Run(tc.name, func(t *testing.T) {
+//			ctrl := gomock.NewController(t)
+//			defer ctrl.Finish()
+//
+//			store := mockdb.NewMockStore(ctrl)
+//			tc.buildStubs(store)
+//
+//			server := NewServer(store)
+//			recorder := httptest.NewRecorder()
+//
+//			data, err := json.Marshal(tc.body)
+//			require.NoError(t, err)
+//
+//			url := "/production"
+//			request, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
+//			require.NoError(t, err)
+//
+//			server.router.ServeHTTP(recorder, request)
+//			tc.checkResponse(recorder)
+//		})
+//	}
+//}
+
 // Randomize production
 func randomProduction() db.Production {
 
