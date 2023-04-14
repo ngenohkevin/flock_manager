@@ -53,7 +53,20 @@ func TestGetProductionAPI(t *testing.T) {
 			ID:   prod.ID,
 			buildStubs: func(store *mockdb.MockStore) {
 				store.EXPECT().GetProduction(gomock.Any(), gomock.Eq(prod.ID)).Times(1).
-					Return()
+					Return(db.Production{}, sql.ErrConnDone)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusInternalServerError, recorder.Code)
+			},
+		},
+		{
+			name: "InvalidID",
+			ID:   0,
+			buildStubs: func(store *mockdb.MockStore) {
+				store.EXPECT().GetBreed(gomock.Any(), gomock.Any()).Times(0)
+			},
+			checkResponse: func(t *testing.T, recorder *httptest.ResponseRecorder) {
+				require.Equal(t, http.StatusBadRequest, recorder.Code)
 			},
 		},
 	}
