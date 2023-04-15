@@ -207,6 +207,9 @@ func TestListBreedsAPI(t *testing.T) {
 				requireBodyMatchBreeds(t, recorder.Body, breeds)
 			},
 		},
+		
+		//authentication should be implemented first
+
 		//{
 		//	name: "NoAuthorization",
 		//	query: Query{
