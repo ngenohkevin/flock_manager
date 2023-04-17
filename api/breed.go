@@ -3,6 +3,7 @@ package api
 import (
 	"database/sql"
 	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 	db "github.com/ngenohkevin/flock_manager/db/sqlc"
 	"net/http"
 	"strconv"
@@ -21,6 +22,13 @@ func (server *Server) createBreed(ctx *gin.Context) {
 	}
 	breed, err := server.store.CreateBreed(ctx, req.Breed)
 	if err != nil {
+		if pqError, ok := err.(*pq.Error); ok {
+			switch pqError.Code.Name() {
+			case "foreign_key_violation", "unique_violation":
+				ctx.JSON(http.StatusForbidden, errorResponse(err))
+				return
+			}
+		}
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
