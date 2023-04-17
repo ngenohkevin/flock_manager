@@ -3,14 +3,14 @@ package db
 import (
 	"context"
 	"database/sql"
-	"github.com/ngenohkevin/flock_manager/db/util"
 	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
 )
 
 func createdRandomBreed(t *testing.T) Breed {
-	arg := util.RandomBreed()
+	user := createdRandomUser(t)
+	arg := user.Username
 
 	breed, err := testQueries.CreateBreed(context.Background(), arg)
 	require.NoError(t, err)
@@ -40,11 +40,12 @@ func TestGetBreed(t *testing.T) {
 }
 
 func TestUpdateBreed(t *testing.T) {
+	user := createdRandomUser(t)
 	breed1 := createdRandomBreed(t)
 
 	arg := UpdateBreedParams{
 		BreedID:   breed1.BreedID,
-		BreedName: util.RandomBreed(),
+		BreedName: user.Username,
 	}
 
 	breed2, err := testQueries.UpdateBreed(context.Background(), arg)

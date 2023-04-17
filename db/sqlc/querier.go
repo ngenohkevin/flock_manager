@@ -13,6 +13,7 @@ type Querier interface {
 	CreateHatchery(ctx context.Context, arg CreateHatcheryParams) (Hatchery, error)
 	CreatePremises(ctx context.Context, arg CreatePremisesParams) (Premise, error)
 	CreateProduction(ctx context.Context, arg CreateProductionParams) (Production, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (User, error)
 	DeleteBreed(ctx context.Context, breedID int64) error
 	DeleteHatchery(ctx context.Context, id int64) error
 	DeletePremises(ctx context.Context, id int64) error
@@ -21,6 +22,7 @@ type Querier interface {
 	GetHatchery(ctx context.Context, id int64) (Hatchery, error)
 	GetPremises(ctx context.Context, id int64) (Premise, error)
 	GetProduction(ctx context.Context, id int64) (Production, error)
+	GetUser(ctx context.Context, username string) (User, error)
 	ListBreeds(ctx context.Context, arg ListBreedsParams) ([]Breed, error)
 	ListHatchery(ctx context.Context, arg ListHatcheryParams) ([]Hatchery, error)
 	ListPremises(ctx context.Context, arg ListPremisesParams) ([]Premise, error)
