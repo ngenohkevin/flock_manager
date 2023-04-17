@@ -1,9 +1,2 @@
-drop table if exists hatchery;
 
-drop table if exists production;
-
-drop table if exists premises;
-
-drop table if exists breed;
-
-DROP TABLE IF EXISTS users;
+drop table if exists public.users cascade;
