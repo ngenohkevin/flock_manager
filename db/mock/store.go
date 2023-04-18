@@ -36,7 +36,7 @@ func (m *MockStore) EXPECT() *MockStoreMockRecorder {
 }
 
 // CreateBreed mocks base method.
-func (m *MockStore) CreateBreed(arg0 context.Context, arg1 string) (db.Breed, error) {
+func (m *MockStore) CreateBreed(arg0 context.Context, arg1 db.CreateBreedParams) (db.Breed, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "CreateBreed", arg0, arg1)
 	ret0, _ := ret[0].(db.Breed)
