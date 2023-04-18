@@ -11,6 +11,7 @@ import (
 type Breed struct {
 	BreedID   int64     `json:"breed_id"`
 	BreedName string    `json:"breed_name"`
+	Username  string    `json:"username"`
 	CreatedAt time.Time `json:"created_at"`
 }
 

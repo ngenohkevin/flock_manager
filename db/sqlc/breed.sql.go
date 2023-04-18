@@ -12,16 +12,27 @@ import (
 const createBreed = `-- name: CreateBreed :one
 
 INSERT INTO breed (
-                   breed_name
+                   breed_name,
+                   username
 ) VALUES (
-           $1
-) RETURNING breed_id, breed_name, created_at
+           $1, $2
+) RETURNING breed_id, breed_name, username, created_at
 `
 
-func (q *Queries) CreateBreed(ctx context.Context, breedName string) (Breed, error) {
-	row := q.db.QueryRowContext(ctx, createBreed, breedName)
+type CreateBreedParams struct {
+	BreedName string `json:"breed_name"`
+	Username  string `json:"username"`
+}
+
+func (q *Queries) CreateBreed(ctx context.Context, arg CreateBreedParams) (Breed, error) {
+	row := q.db.QueryRowContext(ctx, createBreed, arg.BreedName, arg.Username)
 	var i Breed
-	err := row.Scan(&i.BreedID, &i.BreedName, &i.CreatedAt)
+	err := row.Scan(
+		&i.BreedID,
+		&i.BreedName,
+		&i.Username,
+		&i.CreatedAt,
+	)
 	return i, err
 }
 
@@ -36,19 +47,24 @@ func (q *Queries) DeleteBreed(ctx context.Context, breedID int64) error {
 }
 
 const getBreed = `-- name: GetBreed :one
-SELECT breed_id, breed_name, created_at FROM breed
+SELECT breed_id, breed_name, username, created_at FROM breed
 WHERE breed_id = $1 LIMIT 1
 `
 
 func (q *Queries) GetBreed(ctx context.Context, breedID int64) (Breed, error) {
 	row := q.db.QueryRowContext(ctx, getBreed, breedID)
 	var i Breed
-	err := row.Scan(&i.BreedID, &i.BreedName, &i.CreatedAt)
+	err := row.Scan(
+		&i.BreedID,
+		&i.BreedName,
+		&i.Username,
+		&i.CreatedAt,
+	)
 	return i, err
 }
 
 const listBreeds = `-- name: ListBreeds :many
-SELECT breed_id, breed_name, created_at FROM breed
+SELECT breed_id, breed_name, username, created_at FROM breed
 ORDER BY breed_id
     LIMIT $1
 OFFSET $2
@@ -68,7 +84,12 @@ func (q *Queries) ListBreeds(ctx context.Context, arg ListBreedsParams) ([]Breed
 	items := []Breed{}
 	for rows.Next() {
 		var i Breed
-		if err := rows.Scan(&i.BreedID, &i.BreedName, &i.CreatedAt); err != nil {
+		if err := rows.Scan(
+			&i.BreedID,
+			&i.BreedName,
+			&i.Username,
+			&i.CreatedAt,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -86,7 +107,7 @@ const updateBreed = `-- name: UpdateBreed :one
 UPDATE breed
 set breed_name = $2
 WHERE breed_id = $1
-    RETURNING breed_id, breed_name, created_at
+    RETURNING breed_id, breed_name, username, created_at
 `
 
 type UpdateBreedParams struct {
@@ -97,6 +118,11 @@ type UpdateBreedParams struct {
 func (q *Queries) UpdateBreed(ctx context.Context, arg UpdateBreedParams) (Breed, error) {
 	row := q.db.QueryRowContext(ctx, updateBreed, arg.BreedID, arg.BreedName)
 	var i Breed
-	err := row.Scan(&i.BreedID, &i.BreedName, &i.CreatedAt)
+	err := row.Scan(
+		&i.BreedID,
+		&i.BreedName,
+		&i.Username,
+		&i.CreatedAt,
+	)
 	return i, err
 }

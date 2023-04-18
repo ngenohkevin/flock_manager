@@ -9,7 +9,7 @@ import (
 )
 
 type Querier interface {
-	CreateBreed(ctx context.Context, breedName string) (Breed, error)
+	CreateBreed(ctx context.Context, arg CreateBreedParams) (Breed, error)
 	CreateHatchery(ctx context.Context, arg CreateHatcheryParams) (Hatchery, error)
 	CreatePremises(ctx context.Context, arg CreatePremisesParams) (Premise, error)
 	CreateProduction(ctx context.Context, arg CreateProductionParams) (Production, error)
