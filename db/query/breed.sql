@@ -1,9 +1,10 @@
 -- name: CreateBreed :one
 
 INSERT INTO breed (
-                   breed_name
+                   breed_name,
+                   username
 ) VALUES (
-           $1
+           $1, $2
 ) RETURNING *;
 
 -- name: GetBreed :one
