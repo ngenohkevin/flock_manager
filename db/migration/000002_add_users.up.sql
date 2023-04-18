@@ -1,5 +1,5 @@
 CREATE TABLE "users" (
-                         "username" varchar UNIQUE PRIMARY KEY NOT NULL,
+                         "username" varchar PRIMARY KEY,
                          "hashed_password" varchar NOT NULL,
                          "full_name" varchar NOT NULL,
                          "email" varchar UNIQUE NOT NULL,
@@ -7,4 +7,4 @@ CREATE TABLE "users" (
                          "created_at" timestamptz NOT NULL DEFAULT (now())
 );
 
-ALTER TABLE "breed" ADD FOREIGN KEY ("breed_name") REFERENCES "users" ("username");
+ALTER TABLE "breed" ADD FOREIGN KEY ("username") REFERENCES "users" ("username") ON DELETE CASCADE;

@@ -1,8 +1,10 @@
 CREATE TABLE "breed" (
                          "breed_id" BIGSERIAL UNIQUE PRIMARY KEY,
                          "breed_name" varchar UNIQUE NOT NULL,
+                         "username" varchar NOT NULL,
                          "created_at" timestamptz NOT NULL DEFAULT (now())
 );
+
 
 CREATE TABLE "production" (
                               "id" BIGSERIAL PRIMARY KEY,
