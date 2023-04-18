@@ -10,7 +10,8 @@ import (
 )
 
 type createBreedRequest struct {
-	Breed string `json:"breed" binding:"required"`
+	Breed    string `json:"breed" binding:"required"`
+	Username string `json:"username" binding:"required"`
 }
 
 // createBreed Handler
@@ -20,7 +21,11 @@ func (server *Server) createBreed(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-	breed, err := server.store.CreateBreed(ctx, req.Breed)
+	arg := db.CreateBreedParams{
+		BreedName: req.Breed,
+		Username:  req.Username,
+	}
+	breed, err := server.store.CreateBreed(ctx, arg)
 	if err != nil {
 		if pqError, ok := err.(*pq.Error); ok {
 			switch pqError.Code.Name() {
