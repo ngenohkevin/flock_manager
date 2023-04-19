@@ -83,7 +83,7 @@ func TestGetBreedAPI(t *testing.T) {
 			store := mockdb.NewMockStore(ctrl)
 			tc.buildStubs(store)
 
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			url := fmt.Sprintf("/breeds/%d", tc.BreedID)
@@ -283,7 +283,7 @@ func TestListBreedsAPI(t *testing.T) {
 			store := mockdb.NewMockStore(ctrl)
 			tc.buildStubs(store)
 
-			server := NewServer(store)
+			server := newTestServer(t, store)
 			recorder := httptest.NewRecorder()
 
 			request, err := http.NewRequest(http.MethodGet, "/breeds", nil)
