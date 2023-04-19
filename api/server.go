@@ -1,23 +1,41 @@
 package api
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	db "github.com/ngenohkevin/flock_manager/db/sqlc"
+	"github.com/ngenohkevin/flock_manager/db/util"
+	"github.com/ngenohkevin/flock_manager/token"
 )
 
 type Server struct {
-	store  db.Store
-	router *gin.Engine
+	config     util.Config
+	store      db.Store
+	tokenMaker token.Maker
+	router     *gin.Engine
 }
 
-func NewServer(store db.Store) *Server {
-	server := &Server{
-		store: store,
+func NewServer(config util.Config, store db.Store) (*Server, error) {
+	tokenMaker, err := token.NewPasetoMaker(config.TokenSymmetricKey)
+	if err != nil {
+		return nil, fmt.Errorf("cannot create a token maker: %w", err)
 	}
-	router := gin.Default()
+	server := &Server{
+		config:     config,
+		store:      store,
+		tokenMaker: tokenMaker,
+	}
 
+	server.setUpRouter()
+
+	return server, nil
+}
+
+func (server *Server) setUpRouter() {
+	router := gin.Default()
 	//user Route
 	router.POST("/users", server.createUser)
+	router.POST("/users/login", server.loginUser)
 
 	//Breeds route
 	router.POST("/breeds", server.createBreed)
@@ -48,7 +66,6 @@ func NewServer(store db.Store) *Server {
 	router.DELETE("/premise/:id", server.deletePremise)
 
 	server.router = router
-	return server
 }
 
 // Start Run the server
