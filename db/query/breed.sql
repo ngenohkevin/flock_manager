@@ -13,9 +13,10 @@ WHERE breed_id = $1 LIMIT 1;
 
 -- name: ListBreeds :many
 SELECT * FROM breed
+WHERE username = $1
 ORDER BY breed_id
-    LIMIT $1
-OFFSET $2;
+    LIMIT $2
+OFFSET $3;
 
 -- name: UpdateBreed :one
 UPDATE breed
