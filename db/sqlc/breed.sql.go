@@ -65,18 +65,20 @@ func (q *Queries) GetBreed(ctx context.Context, breedID int64) (Breed, error) {
 
 const listBreeds = `-- name: ListBreeds :many
 SELECT breed_id, breed_name, username, created_at FROM breed
+WHERE username = $1
 ORDER BY breed_id
-    LIMIT $1
-OFFSET $2
+    LIMIT $2
+OFFSET $3
 `
 
 type ListBreedsParams struct {
-	Limit  int32 `json:"limit"`
-	Offset int32 `json:"offset"`
+	Username string `json:"username"`
+	Limit    int32  `json:"limit"`
+	Offset   int32  `json:"offset"`
 }
 
 func (q *Queries) ListBreeds(ctx context.Context, arg ListBreedsParams) ([]Breed, error) {
-	rows, err := q.db.QueryContext(ctx, listBreeds, arg.Limit, arg.Offset)
+	rows, err := q.db.QueryContext(ctx, listBreeds, arg.Username, arg.Limit, arg.Offset)
 	if err != nil {
 		return nil, err
 	}
