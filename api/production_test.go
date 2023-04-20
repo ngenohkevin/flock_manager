@@ -105,18 +105,12 @@ func TestGetProductionAPI(t *testing.T) {
 //		{
 //			name: "OK",
 //			body: gin.H{
-//				"breed_id":      prod.BreedID,
-//				"eggs":          prod.Eggs,
-//				"dirty":         prod.Dirty,
-//				"wrong_shape":   prod.WrongShape,
-//				"weak_shell":    prod.WeakShell,
-//				"damaged":       prod.Damaged,
-//				"hatching_eggs": prod.HatchingEggs,
+//				"eggs": prod.Eggs,
 //			},
 //			buildStubs: func(store *mockdb.MockStore) {
 //				arg := db.CreateProductionParams{
-//					BreedID:      prod.BreedID,
 //					Eggs:         prod.Eggs,
+//					BreedID:      prod.BreedID,
 //					Dirty:        prod.Dirty,
 //					WrongShape:   prod.WrongShape,
 //					WeakShell:    prod.WeakShell,
@@ -159,14 +153,14 @@ func TestGetProductionAPI(t *testing.T) {
 //			store := mockdb.NewMockStore(ctrl)
 //			tc.buildStubs(store)
 //
-//			server := NewServer(store)
+//			server := newTestServer(t, store)
 //			recorder := httptest.NewRecorder()
 //
 //			data, err := json.Marshal(tc.body)
 //			require.NoError(t, err)
 //
 //			url := "/production"
-//			request, err := http.NewRequest(http.MethodPost, url, bytes.NewReader(data))
+//			request, err := http.NewRequest("POST", url, bytes.NewReader(data))
 //			require.NoError(t, err)
 //
 //			server.router.ServeHTTP(recorder, request)
@@ -180,9 +174,11 @@ func randomProduction() db.Production {
 
 	return db.Production{
 		ID:           util.RandomInt(1, 1000),
+		BreedID:      util.RandomInt(1, 1000),
 		Eggs:         util.RandomProduction(),
 		Dirty:        util.RandomProduction(),
 		WrongShape:   util.RandomProduction(),
+		WeakShell:    util.RandomProduction(),
 		Damaged:      util.RandomProduction(),
 		HatchingEggs: util.RandomProduction(),
 	}
@@ -198,12 +194,12 @@ func requireBodyMatchProd(t *testing.T, body *bytes.Buffer, prod db.Production) 
 	require.Equal(t, prod, gotProd)
 }
 
-func requireBodyMatchProduction(t *testing.T, body *bytes.Buffer, production []db.Production) {
-	data, err := io.ReadAll(body)
-	require.NoError(t, err)
-
-	var gotProduction []db.Production
-	err = json.Unmarshal(data, &gotProduction)
-	require.NoError(t, err)
-	require.Equal(t, production, gotProduction)
-}
+//func requireBodyMatchProduction(t *testing.T, body *bytes.Buffer, production []db.Production) {
+//	data, err := io.ReadAll(body)
+//	require.NoError(t, err)
+//
+//	var gotProduction []db.Production
+//	err = json.Unmarshal(data, &gotProduction)
+//	require.NoError(t, err)
+//	require.Equal(t, production, gotProduction)
+//}
