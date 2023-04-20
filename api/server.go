@@ -33,16 +33,19 @@ func NewServer(config util.Config, store db.Store) (*Server, error) {
 
 func (server *Server) setUpRouter() {
 	router := gin.Default()
+
+	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
+
 	//user Route
-	router.POST("/users", server.createUser)
+	authRoutes.POST("/users", server.createUser)
 	router.POST("/users/login", server.loginUser)
 
 	//Breeds route
-	router.POST("/breeds", server.createBreed)
-	router.GET("/breeds/:id", server.getBreed)
-	router.GET("/breeds", server.listBreeds)
-	router.PUT("/breeds/:id", server.updateBreed)
-	router.DELETE("/breeds/:id", server.deleteBreed)
+	authRoutes.POST("/breeds", server.createBreed)
+	authRoutes.GET("/breeds/:id", server.getBreed)
+	authRoutes.GET("/breeds", server.listBreeds)
+	authRoutes.PUT("/breeds/:id", server.updateBreed)
+	authRoutes.DELETE("/breeds/:id", server.deleteBreed)
 
 	//Production Routes
 	router.POST("/production", server.createProduction)
