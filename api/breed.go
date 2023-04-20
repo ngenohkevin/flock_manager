@@ -2,16 +2,17 @@ package api
 
 import (
 	"database/sql"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/lib/pq"
 	db "github.com/ngenohkevin/flock_manager/db/sqlc"
+	"github.com/ngenohkevin/flock_manager/token"
 	"net/http"
 	"strconv"
 )
 
 type createBreedRequest struct {
-	Breed    string `json:"breed" binding:"required"`
-	Username string `json:"username" binding:"required"`
+	Breed string `json:"breed" binding:"required"`
 }
 
 // createBreed Handler
@@ -21,9 +22,10 @@ func (server *Server) createBreed(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	arg := db.CreateBreedParams{
 		BreedName: req.Breed,
-		Username:  req.Username,
+		Username:  authPayload.Username,
 	}
 	breed, err := server.store.CreateBreed(ctx, arg)
 	if err != nil {
@@ -60,6 +62,12 @@ func (server *Server) getBreed(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return
 	}
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
+	if breed.Username != authPayload.Username {
+		err := errors.New("account doesn't belong to the authenticated user")
+		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
+		return
+	}
 	ctx.JSON(http.StatusOK, breed)
 }
 
@@ -75,9 +83,12 @@ func (server *Server) listBreeds(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
+
+	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	arg := db.ListBreedsParams{
-		Limit:  req.PageSize,
-		Offset: (req.PageID - 1) * req.PageSize,
+		Username: authPayload.Username,
+		Limit:    req.PageSize,
+		Offset:   (req.PageID - 1) * req.PageSize,
 	}
 
 	breeds, err := server.store.ListBreeds(ctx, arg)
