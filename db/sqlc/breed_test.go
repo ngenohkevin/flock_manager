@@ -65,20 +65,23 @@ func TestUpdateBreed(t *testing.T) {
 }
 
 func TestListBreeds(t *testing.T) {
+	var lastBreed Breed
 	for i := 0; i < 10; i++ {
-		createdRandomBreed(t)
+		lastBreed = createdRandomBreed(t)
 	}
 	arg := ListBreedsParams{
-		Limit:  5,
-		Offset: 5,
+		Username: lastBreed.Username,
+		Limit:    5,
+		Offset:   0,
 	}
 
 	breeds, err := testQueries.ListBreeds(context.Background(), arg)
 	require.NoError(t, err)
-	require.Len(t, breeds, 5)
+	require.NotEmpty(t, breeds)
 
 	for _, breed := range breeds {
 		require.NotEmpty(t, breed)
+		require.Equal(t, lastBreed.Username, breed.Username)
 	}
 }
 
