@@ -33,3 +33,5 @@ mock:
 
 
 .PHONY: postgres createdb dropdb migrateup migratedown sqlc test server mock migrateup1 migratedown1
+
+#	migrate -path db/migration -database "postgresql://root:%7CFY(Kf3-_P42-YC4uui_zTDr%3Fk0D@flock-manager.citdezvqnc1s.us-east-2.rds.amazonaws.com:5432/flock_manager" -verbose up
