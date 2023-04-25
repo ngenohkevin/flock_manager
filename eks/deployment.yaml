@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: flock-manager-api-deployment
+
+  labels:
+
+    app: flock-manager-api
+
+spec:
+
+  replicas: 1
+
+  selector:
+
+    matchLabels:
+
+      app: flock-manager-api
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: flock-manager-api
+
+    spec:
+
+      containers:
+
+        - name: flock-manager-api
+
+          image: 708577282797.dkr.ecr.af-south-1.amazonaws.com/flockmanager:754b17722b580bc7934fe43286f1b96887c3addf
+
+          ports:
+
+            - containerPort: 8080
