@@ -34,7 +34,7 @@ spec:
 
         - name: flock-manager-api
 
-          image: 708577282797.dkr.ecr.af-south-1.amazonaws.com/flockmanager:754b17722b580bc7934fe43286f1b96887c3addf
+          image: 708577282797.dkr.ecr.af-south-1.amazonaws.com/flockmanager:f7857e382fca796df4bafce278ecff769355cfc0
 
           ports:
 
