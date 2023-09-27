@@ -17,19 +17,14 @@ Create New users
 
 ```json
 {
-    "username": "Dilan",
-    "full_name": "kevin dilan",
-    "email": "dilankev@gmail.com",
+    "username": "ngenoh",
+    "full_name": "kevin ngenoh",
+    "email": "ngenohkev@gmail.com",
     "password": "secret"
 }
 ```
 
 ### 🔑 Authentication bearer
-
-|Param|value|Type|
-|---|---|---|
-|token|v2.local.dAqsTfT9Is4Imlg0yY69n6Kg75M1fSyj3dNX_7s02whATwUsHTYXXEC7q8CLiruPCpepVVA6214M83en0Te8VO5QTHaw86jtQg7EaAh8NwYFQMCN_yd4wMgzMQbqHlKnhWwOe7FhDAQk1A5QuH2Y48XakPm-mlkR6DfzO0e3aYXVQBfDT_qRoMdvdznhMCrh5Gayi3XbMXX3V2IYkH4TLrwM_TIQGf_EVz3OcBEvepDFN5HTTYeGLtYjTWqEJ2IuRjeh_2hhA-9biJ26dy8.bnVsbA|string|
-
 
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
@@ -63,15 +58,12 @@ Create Breed
 ```json
 {
    "breed": "Layers21",
-   "username": "Dilan"
+   "username": "ngenoh"
 }
 ```
 
 ### 🔑 Authentication bearer
 
-|Param|value|Type|
-|---|---|---|
-|token|v2.local.XqEEh29KtwVw6ZiNLYjYdu9MIw4XWe4VkTPOuumXarPz5n30hVO1GSWb8iL-PoQYctHMJ0p-lXzWdyyMLdDgXTfzM86wVqkCZRRL9tyPN23yrPyuoFIg3_AQC99lvwf9vaeBVaxuhpB89Ti7Xfqcbh3IBLPdSXNLZdNe07SDoZSSXMqiwcKzW5Fho7RfBcqq6N6WwRuSrNlVxck8_hP631vP9foOblXhdzn4F7oJ8SRqJBlPgXisiHYbjMj8KtWYWbMTPdeMQuGECgsk5A.bnVsbA|string|
 
 
 
@@ -104,14 +96,6 @@ List Breeds by page number and size
 |---|---|
 |page_id|1|
 |page_size|10|
-
-
-### 🔑 Authentication bearer
-
-|Param|value|Type|
-|---|---|---|
-|token|v2.local.FPZAQnAysm9K1xHbrC9C-heVDCv-mQwIeppS7sFwEM4EMNWFP3N3HqvOKos4uVLYph5uRHcE6mH-isKo5c6IFlJViqvO4npT_Sjy3sYvYjLDrfjSIfl1RfhXJqHvWjVEKHoUrc26E7q-4ckY5spf74kCMhf4DrhYZsFJdVOTkp0yf7llTM-O38NPXK2O7Dz9TQWCZFOsBfB6Rzu_hAc53_UwxiYXhNhXoTEwiKqiMv-38Ef-G-sHN4W7ynxYLjJN-xSGK9ZVsp4Ljc1pLjg.bnVsbA|string|
-
 
 
 ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
