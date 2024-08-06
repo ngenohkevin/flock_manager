@@ -5,7 +5,7 @@ design improvements from the design of the database to the flow of the API.
 
 The project has used Docker, Github Actions, testing, SQLC, db migration, Authentication middleware and authorization rules, database mocking, Gin Gonic and spf13/viper . This has improved the performance, scalability and readability of the API.
 
-Note: This is a personal projects and there's more to be implemented over time. It's a big learning experience!
+Note: This is a replica of the original project i built for kukuchic and is currently in use!
 
 ## End-point: Create Users
 Create New users
